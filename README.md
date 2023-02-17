@@ -28,3 +28,7 @@ Transforming a monolithic architecture into a microservices architecture can be 
 * Iterate and refine: As you move to a microservices architecture, continue to iterate and refine your services. Use feedback from monitoring and logging to make improvements, and continually evaluate the boundaries between your services.
 
 It's important to note that transforming a monolithic application into a microservices architecture is not a one-time event. It's an ongoing process that requires ongoing attention and refinement to ensure that the services are working effectively and efficiently together.
+
+### Identify services
+
+![Services](services.png)
