@@ -1,6 +1,6 @@
 # ITSector
 
-##Domains e subdomains
+## Domains e subdomains
 
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | Consultas | Transferências | Pagamentos | Autenticação | Gerir Conta | Gerir Cartões |
