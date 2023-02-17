@@ -2,7 +2,6 @@
 
 ## Domains e subdomains
 
-| -------- | -------- | -------- | -------- | -------- | -------- |
 | Consultas | Transferências | Pagamentos | Autenticação | Gerir Conta | Gerir Cartões |
 | -------- | -------- | -------- | -------- | -------- | -------- |
 | Consultar à ordem | | | Reset Password | Criar conta nova | Criar/Pedir cartão |
