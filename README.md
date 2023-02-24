@@ -5,7 +5,7 @@
 | Consultas | Transferências | Pagamentos | Autenticação | Gerir Conta | Gerir Cartões | Notificações
 | -------- | -------- | -------- | -------- | -------- | -------- | -------- |
 | Consultar à ordem | Por NIB | Por referência | Reset Password | Criar conta nova | Criar/Pedir cartão | Balance updates |
-| Consultar IBAN | Consultas | | Login | Apagar Conta | Bloquear/Desativar cartão | Transaction confirmations |
+| Consultar IBAN | Consultas | | Login | Apagar Conta | Bloquear/Desativar cartão | Confirmação de transações |
 | Consultar comprovativos | | | Logout | Editar dados | Limitar Cartão | |
 | Consultar documentos | | | | | Consultar dados cartão | |
 
