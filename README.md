@@ -4,10 +4,10 @@
 
 | Consultas | Transferências | Pagamentos | Autenticação | Gerir Conta | Gerir Cartões |
 | -------- | -------- | -------- | -------- | -------- | -------- |
-| Consultar à ordem | | | Reset Password | Criar conta nova | Criar/Pedir cartão |
-| Consultar IBAN | | | Login | Apagar Conta | Bloquear/Apagar Cartão |
+| Consultar à ordem | Por NIB | Por referência | Reset Password | Criar conta nova | Criar/Pedir cartão |
+| Consultar IBAN | | | Login | Apagar Conta | Bloquear/Desativar cartão |
 | Consultar comprovativos | | | Logout | Editar dados | Limitar Cartão | 
-| Consultar documentos | | | | | | 
+| Consultar documentos | | | | | Consultar dados cartão | 
 
 ## Business Model
 
