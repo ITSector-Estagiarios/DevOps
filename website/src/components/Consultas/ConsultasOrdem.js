@@ -56,8 +56,8 @@ function MonthlyStatements() {
 export default MonthlyStatements;
   
 
-export class ConsultasOrdem extends Component {
-  static displayName = ConsultasOrdem.name;
+export class Ordem extends Component {
+  static displayName = Ordem.name;
 
   render() {
     return (

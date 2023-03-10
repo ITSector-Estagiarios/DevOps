@@ -1,6 +1,7 @@
 import React from 'react';
 import './HomePage.css';
 import LogoutButton from "./LogoutButton";
+import { Link } from 'react-router-dom';
 
 
 const HomePage = () => {
@@ -15,12 +16,15 @@ const HomePage = () => {
           <ul>
             <li>
               <a href="#">Home</a>
+              {/*<Link to="/">Home</Link>*/}
             </li>
             <li>
               <a href="#">Transferências</a>
+              {/*<Link to="/transferencias">Transferências</Link>*/}
             </li>
             <li>
               <a href="#">Consultas</a>
+              {/*<Link to="/consultas">Consultas</Link>*/}
             </li>
           </ul>
         </nav>

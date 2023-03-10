@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './ConsultasIBAN.css';
 import { useState } from "react";
 
-function IbanPage() {
+function IBAN() {
   const [iban, setIban] = useState("");
 
   function handleSubmit(event) {
@@ -31,14 +31,4 @@ function IbanPage() {
   );
 }
 
-export class ConsultasIBAN extends Component {
-    static displayName = ConsultasIBAN.name;
-  
-    render() {
-      return (
-        <div>
-            <IbanPage />
-        </div>
-      );
-    }
-  }
+export default IBAN;
