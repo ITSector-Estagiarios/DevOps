@@ -14,8 +14,8 @@ variables:
   buildFolder: 'website/build'
 
 steps:
-- script: pushd $(projectFolder) && npm install && popd
+- script: cd $(projectFolder) && npm install
   displayName: 'npm install'
-- script: pushd $(projectFolder) && npm run build && popd
+- script: npm run build
   displayName: 'npm run build'
 
