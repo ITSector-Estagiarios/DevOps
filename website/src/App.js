@@ -1,12 +1,17 @@
 import './App.css';
 import React, { useState } from 'react';
-import ReactDOM from "react-dom";
-import LoginPage from './components/Login/LoginPage';
-import HomePage from './components/Home/HomePage';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+//import ReactDOM from "react-dom";
+import LoginPage from './pages/Login/LoginPage';
+import Main from './pages/Main';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Transferencias from './pages/Transferencias/Transferencias';
+import ConsultasIBAN from './pages/Consultas/ConsultasIBAN';
+import ConsultasOrdem from './pages/Consultas/ConsultasOrdem';
+import NoPage from './NoPage';
+import Home from './pages/Home/Home';
 
 function App() {
-  /*const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -14,18 +19,20 @@ function App() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-  };*/
+  };
 
   return (
-    /*<Router>
-      <Route path="/" exact>
-        {isLoggedIn ? <HomePage handleLogout={handleLogout} /> : <LoginPage handleLogin={handleLogin} />}
-      </Route>
-      <Route path="/home">
-        {isLoggedIn ? <HomePage handleLogout={handleLogout} /> : <LoginPage handleLogin={handleLogin} />}
-      </Route>
-    </Router>*/
-    ReactDOM.render(<LoginPage />, document.getElementById("root"))
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />}>
+        <Route path="home" element={<Home />} />
+          <Route path="transferencias" element={<Transferencias />} />
+          <Route path="consultarIBAN" element={<ConsultasIBAN />} />
+          <Route path="consultarOrdem" element={<ConsultasOrdem />} />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
