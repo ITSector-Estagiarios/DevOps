@@ -1,9 +1,9 @@
-import { Home } from "./components/Home/HomePage";
+import Home from "./components/Home/HomePage";
 /*import { Consultas } from "./components/Consultas";
 import { ConsultasOrdem } from "./components/ConsultasOrdem";
 import { ConsultasIBAN } from "./components/ConsultasIBAN";*/
-import { Transferencias } from "./components/Transferencias/Transferencias";
-import { Login } from "./components/Login/LoginPage";
+import Transferencias from "./components/Transferencias/Transferencias";
+import Login from "./components/Login/LoginPage";
 
 const AppRoutes = [
   {
