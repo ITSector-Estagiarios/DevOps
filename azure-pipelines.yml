@@ -9,10 +9,13 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  projectFolder: 'website'
+  buildFolder: 'website/build'
 
-- script: |
-    npm install
+steps:
+- script: pushd $(projectFolder) && npm install && popd
   displayName: 'npm install'
+- script: pushd $(projectFolder) && npm run build && popd
+  displayName: 'npm run build'
+
