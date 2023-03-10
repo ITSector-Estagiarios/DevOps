@@ -26,7 +26,7 @@ steps:
     rootFolderOrFile: $(buildFolder)
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
-    includeRootFolder: false
+    includeRootFolder: true
 
 ## Publish the zip file
 - task: PublishBuildArtifacts@1
