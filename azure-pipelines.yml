@@ -31,4 +31,4 @@ steps:
 ## Publish the zip file
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
