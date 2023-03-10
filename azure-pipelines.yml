@@ -25,10 +25,10 @@ steps:
   inputs:
     rootFolderOrFile: $(buildFolder)
     archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
     includeRootFolder: true
 
 ## Publish the zip file
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
