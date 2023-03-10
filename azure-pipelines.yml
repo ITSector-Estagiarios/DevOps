@@ -15,7 +15,9 @@ variables:
 
 steps:
 - script: cd $(projectFolder) && npm install
-  displayName: 'npm install'
-- script: npm run build
-  displayName: 'npm run build'
+  displayName: 'Install dependencies'
+- script: cd $(projectFolder) && npm run build
+  displayName: 'Build'
+- script: cd $(projectFolder) && npm test -- --coverage
+  displayName: 'Test'
 
