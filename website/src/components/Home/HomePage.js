@@ -2,6 +2,8 @@ import React from 'react';
 import './HomePage.css';
 import LogoutButton from "./LogoutButton";
 import { Link } from 'react-router-dom';
+import AppRoutes from '../../AppRoutes';
+
 
 
 const HomePage = () => {
@@ -15,15 +17,15 @@ const HomePage = () => {
         <nav>
           <ul>
             <li>
-              <a href="#">Home</a>
+              {/*<a href="#">Home</a>*/}
               {/*<Link to="/">Home</Link>*/}
             </li>
             <li>
-              <a href="#">Transferências</a>
+              <a href="/transferencias">Transferências</a>
               {/*<Link to="/transferencias">Transferências</Link>*/}
             </li>
             <li>
-              <a href="#">Consultas</a>
+              {/*<a href="#">Consultas</a>*/}
               {/*<Link to="/consultas">Consultas</Link>*/}
             </li>
           </ul>
