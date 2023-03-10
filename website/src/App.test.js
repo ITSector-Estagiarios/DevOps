@@ -1,5 +1,5 @@
 const sum = (a,b)=>{
-  return a+b
+  return a+b*3
 }
 
 test('adds 1 + 2 to equal 3', () => {
