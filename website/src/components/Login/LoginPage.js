@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import HomePage from "../Home/HomePage";
+import Transferencias from "../Transferencias/Transferencias";
 
 //É o handler do login correto ou errado 
 
@@ -14,7 +15,8 @@ function LoginPage() {
   return (
     <div>
       {isLoggedIn ? (
-        <HomePage />
+        //<HomePage />
+        <Transferencias />
       ) : (
         <LoginForm handleLogin={handleLogin} />
       )}
