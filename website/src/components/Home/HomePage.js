@@ -20,7 +20,7 @@ const HomePage = () => {
               <a href="#">Transferências</a>
             </li>
             <li>
-              <a href="#">Consulta</a>
+              <a href="#">Consultas</a>
             </li>
           </ul>
         </nav>
