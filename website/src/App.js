@@ -1,5 +1,5 @@
 //import './App.css';
-import React, { useState } from 'react';
+import React from 'react';
 import LoginPage from './pages/Login/LoginPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Transferencias from './pages/Transferencias/Transferencias';
@@ -9,7 +9,7 @@ import NoPage from './NoPage';
 import Home from './pages/Home/Home';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  /*const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
@@ -17,7 +17,7 @@ function App() {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-  };
+  };*/
 
   return (
     <BrowserRouter>
