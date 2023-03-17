@@ -17,23 +17,23 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.0.2"
   },
-  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "coverage":"jest --coverage ",
+    "coverage": "jest --coverage ",
     "eject": "react-scripts eject",
-    "lol": "echo %npm_config_coverageThreshold%"
+    "mutation":"stryker run",
+    "lol": "node -e \"const val =  parseInt(%npm_config_coveragethreshold%); console.log(val)\""
   },
   "jest": {
-      "collectCoverageFrom": [
-        "src/pages/**/*.js",
-        "src/*.js"
-      ],
+    "collectCoverageFrom": [
+      "src/pages/**/*.js",
+      "src/*.js"
+    ],
     "coverageThreshold": {
       "global": {
-        "branches": "%npm_config_coverageThreshold%",
+        "branches": "node -e \"const val =  parseInt(%npm_config_coveragethreshold%); console.log(val)\"",
         "functions": 70,
         "lines": 70,
         "statements": 70
@@ -59,6 +59,7 @@
     ]
   },
   "devDependencies": {
+    "@stryker-mutator/jest-runner": "^6.4.1",
     "jest": "^27.5.1",
     "react-scripts": "^5.0.1"
   }
