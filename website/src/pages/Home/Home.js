@@ -4,7 +4,7 @@ const Home = () => {
   return (
     <div>
       {/* Cabeçalho */}
-      <header className="header">
+      <header className="home-header">
         <h1>React Bank</h1>
         <p>Safety is our priority</p>
       </header>

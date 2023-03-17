@@ -37,9 +37,9 @@ function LoginForm({ handleLogin }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Emaaaaaaaaaaaaaaaaaaaaaaail:
+    <form onSubmit={handleSubmit} class="login-form">
+      <label class="email">
+        Email:
         <input
           type="email"
           value={email}
@@ -48,7 +48,7 @@ function LoginForm({ handleLogin }) {
         />
       </label>
       <br />
-      <label>
+      <label class="pass">
         Password:
         <input
           type="password"
@@ -59,7 +59,7 @@ function LoginForm({ handleLogin }) {
       </label>
       <br />
       {error && <div style={{ color: "red" }}>{error}</div>}
-      <button type="submit">Login</button>
+      <button type="submit" class="login">Login</button>
     </form>
   );
 }
