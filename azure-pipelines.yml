@@ -6,29 +6,50 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
-
 variables:
-  projectFolder: 'website'
-  buildFolder: 'website/build'
+   projectFolder: 'website'
+   buildFolder: 'website/build'
+   qualityGateThreshold: '21'
 
-steps:
-- script: cd $(projectFolder) && npm install
-  displayName: 'Install dependencies'
-- script: cd $(projectFolder) && npm run build
-  displayName: 'Build'
-- script: cd $(projectFolder) && npm test -- --coverage
-  displayName: 'Test'
+stages:
+- stage: Development
+  pool:
+    vmImage: ubuntu-latest
+  jobs:
+  - job: Development
+    steps:
+    - script: cd $(projectFolder) && npm install
+      displayName: 'Install dependencies'
+    - script: cd $(projectFolder) && npm run build
+      displayName: 'Build'
+    - script: cd $(projectFolder) && npm test -- --coverage --coverageThreshold='{\"global":{\"statements\":\"$(qualityGateThreshold)\"}}'
+      displayName: 'Test'
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: $(buildFolder)
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
+        includeRootFolder: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: $(buildFolder)
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
-    includeRootFolder: true
-
-## Publish the zip file
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
+- stage: QA
+  dependsOn: Development
+  condition: succeeded('Development')
+  pool:
+      vmImage: ubuntu-latest
+      environment: Experimental environment
+  jobs:
+  - job: Approval
+    displayName: "Manual Approval"
+    pool: server
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 60
+        inputs:
+          notifyUsers: 'E6022@itsector.pt'
+          instructions: 'Test'
+  - job: Placeholder
+    steps:
+    - script: echo "Hello World"
