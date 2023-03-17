@@ -22,7 +22,7 @@ stages:
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    - script: cd $(projectFolder) && npm test -- --coverage --coverageThreshold='{\"global\":{\"statements\":\"$(qualityGateThreshold)\"}}'
+    - script: cd $(projectFolder) && npm test -- --coverage --coverageThreshold='{"global":{"statements":"$(qualityGateThreshold)"}}'
       displayName: 'Test'
     - task: ArchiveFiles@2
       inputs:
@@ -37,12 +37,13 @@ stages:
 - stage: QA
   dependsOn: Development
   condition: succeeded('Development')
+  pool:
+      vmImage: ubuntu-latest
+      environment: Experimental environment
   jobs:
   - job: Approval
     displayName: "Manual Approval"
-    pool:
-      vmImage: ubuntu-latest
-      environment: Experimental environment
+    pool: server
     steps:
       - task: ManualValidation@0
         timeoutInMinutes: 60
