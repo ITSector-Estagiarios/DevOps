@@ -1,4 +1,4 @@
-# ITSector  
+# ITSector 
 
 ## Domains e subdomains
 
