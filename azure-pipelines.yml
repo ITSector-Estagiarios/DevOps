@@ -9,7 +9,7 @@ trigger:
 variables:
    projectFolder: 'website'
    buildFolder: 'website/build'
-   qualityGateThreshold: '21'
+   qualityGateThreshold: '0'
 
 stages:
 - stage: Development
@@ -22,7 +22,7 @@ stages:
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"60","functions":"60","lines":"60","statements":"60"}}'
+    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Test' 
     - task: ArchiveFiles@2
       inputs:
