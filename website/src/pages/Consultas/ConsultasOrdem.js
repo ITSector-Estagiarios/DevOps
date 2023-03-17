@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Component } from 'react';
 
 function MonthlyStatements() {
   // Define estado inicial para o mês e ano selecionado
   const [selectedMonth, setSelectedMonth] = useState('January');
   const [selectedYear, setSelectedYear] = useState('2022');
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [selectedMonth, selectedYear]);
+
+  const fetchTransactions = async () => {
+    // Fazer chamada a uma API ou servidor para obter as transações
+    const response = await fetch(`/api/transactions?month=${selectedMonth}&year=${selectedYear}`);
+    const data = await response.json();
+    setTransactions(data);
+  };
 
   // Função para atualizar o mês selecionado
   const handleMonthChange = (event) => {
@@ -43,18 +55,22 @@ function MonthlyStatements() {
           <option value="2022">2022</option>
           <option value="2021">2021</option>
           <option value="2020">2020</option>
-          <option value="2019">2019</option>
-          <option value="2018">2018</option>
-          <option value="2017">2017</option>
         </select>
       </div>
-      <button className="btn btn-primary">View Statement</button>
+      <button className="btn btn-primary" onClick={fetchTransactions}>View Statement</button>
+      {transactions.length > 0 && (
+        <ul>
+          {transactions.map((transaction) => (
+            <li key={transaction.id}>{transaction.description} - {transaction.amount}</li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
 export default MonthlyStatements;
-  
+
 
 export class Ordem extends Component {
   static displayName = Ordem.name;
