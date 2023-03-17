@@ -6,29 +6,37 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: Development
+  pool:
+    vmImage: ubuntu-latest
 
-variables:
-  projectFolder: 'website'
-  buildFolder: 'website/build'
+  variables:
+    projectFolder: 'website'
+    buildFolder: 'website/build'
 
-steps:
-- script: cd $(projectFolder) && npm install
-  displayName: 'Install dependencies'
-- script: cd $(projectFolder) && npm run build
-  displayName: 'Build'
-- script: cd $(projectFolder) && npm test -- --coverage
-  displayName: 'Test'
+  steps:
+  - script: cd $(projectFolder) && npm install
+    displayName: 'Install dependencies'
+  - script: cd $(projectFolder) && npm run build
+    displayName: 'Build'
+  - script: cd $(projectFolder) && npm test -- --coverage
+    displayName: 'Test'
 
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: $(buildFolder)
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
-    includeRootFolder: true
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: $(buildFolder)
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
+      includeRootFolder: true
 
 ## Publish the zip file
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
+
+- stage: QA
+  dependsOn: Development
+  condition: succeeded('Development')
+  
+  environment: Experimental environment
