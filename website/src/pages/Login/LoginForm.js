@@ -39,7 +39,7 @@ function LoginForm({ handleLogin }) {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Email:
+        Emaaaaaaaaaaaaaaaaaaaaaaail:
         <input
           type="email"
           value={email}
