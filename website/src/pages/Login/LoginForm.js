@@ -1,19 +1,38 @@
 import React, { useState } from "react";
+import { store, authActions } from '../../_store';
+import { useDispatch } from 'react-redux';
 import './LoginForm.css';
 
-//Cria a página de Login
 
+async function postLogin(url = '', data= {}) {
+  console.log(JSON.stringify(data))
+  await fetch(url, {
+    method: 'POST',
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    },
+    body: JSON.stringify(data)
+  }).then(response => {
+    console.log(response)
+    return response.ok
+  }).catch(err => {
+    console.log(err)
+    return false
+  })
+
+}
+
+//Cria a página de Login
 function LoginForm({ handleLogin }) {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (email === "user@example.com" && password === "password") {
+    if (postLogin("http://localhost:4000/users/authenticate",{email,password})) {
       handleLogin();
-    } else {
-      setError("Email or password incorrect!");
     }
   };
 
