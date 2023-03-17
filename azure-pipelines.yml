@@ -6,37 +6,43 @@
 trigger:
 - main
 
+variables:
+   projectFolder: 'website'
+   buildFolder: 'website/build'
+
 stages:
 - stage: Development
   pool:
     vmImage: ubuntu-latest
+  jobs:
+  - job: BuildTest
+    steps:
+    - script: cd $(projectFolder) && npm install
+      displayName: 'Install dependencies'
+    - script: cd $(projectFolder) && npm run build
+      displayName: 'Build'
+    - script: cd $(projectFolder) && npm test -- --coverage
+      displayName: 'Test'
 
-  variables:
-    projectFolder: 'website'
-    buildFolder: 'website/build'
-
-  steps:
-  - script: cd $(projectFolder) && npm install
-    displayName: 'Install dependencies'
-  - script: cd $(projectFolder) && npm run build
-    displayName: 'Build'
-  - script: cd $(projectFolder) && npm test -- --coverage
-    displayName: 'Test'
-
-  - task: ArchiveFiles@2
-    inputs:
-      rootFolderOrFile: $(buildFolder)
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
-      includeRootFolder: true
-
-## Publish the zip file
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
+  - job: ArchiveRelease
+    steps:
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: $(buildFolder)
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
+        includeRootFolder: true
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
 
 - stage: QA
   dependsOn: Development
   condition: succeeded('Development')
-  
-  environment: Experimental environment
+  pool:
+    vmImage: ubuntu-latest
+    environment: Experimental environment
+  jobs:
+  - job: Placeholder
+    steps:
+    - script: echo "Hello World"
