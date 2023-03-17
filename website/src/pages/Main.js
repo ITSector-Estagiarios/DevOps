@@ -27,7 +27,7 @@ const Main = () => {
             </li>
           </ul>
         </nav>
-        <LogoutButton onLogout={handleLogout} />
+        <LogoutButton onLogout={handleLogout} redirectPath="/" />
       </header>
       <Outlet />
     </div>
