@@ -4,7 +4,7 @@ import './Transferencias.css';
 
 
 function Transferencias(){
-  const fromAccount = 985632014521;
+  const fromAccount = "985632014521";
   const [toAccount, setToAccount] = useState("");
   const [amount, setAmount] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
@@ -26,6 +26,11 @@ function Transferencias(){
 
   const handleTransfer = (event) => {
     event.preventDefault();
+
+    if (toAccount === fromAccount) {
+      alert("You cannot transfer money to the same account.");
+      return;
+    }
 
     if ( !toAccount || !amount) {
       alert("Please fill in all fields");
