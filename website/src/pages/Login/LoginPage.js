@@ -5,7 +5,7 @@ import Main from "../Main";
 //É o handler do login correto ou errado 
 
 function LoginPage() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   const handleLogin = () => {
     setIsLoggedIn(true);
