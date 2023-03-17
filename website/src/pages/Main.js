@@ -17,13 +17,13 @@ const Main = () => {
               <Link to="/home">Home</Link>
             </li>
             <li>
-              <Link to="/transferencias">Transferências</Link>
+              <Link to="/transfers">Tranfers</Link>
             </li>
             <li>
-              <Link to="/consultarIBAN">ConsultarIBAN</Link>
+              <Link to="/iban">IBAN</Link>
             </li>
             <li>
-              <Link to="/consultarOrdem">ConsultarOrdem</Link>
+              <Link to="/statements">Monthly Statements</Link>
             </li>
           </ul>
         </nav>

@@ -5,44 +5,44 @@ const Home = () => {
     <div>
       {/* Cabeçalho */}
       <header className="header">
-        <h1>Banco React</h1>
-        <p>Segurança é a nossa prioridade</p>
+        <h1>React Bank</h1>
+        <p>Safety is our priority</p>
       </header>
 
       {/* Conteúdo principal */}
       <main className="main-content">
-        <h2>Por que escolher o Banco React?</h2>
+        <h2>Why choose React Bank?</h2>
         <p>
-          Oferecemos serviços bancários seguros e confiáveis para os nossos clientes.
-          Com uma ampla gama de produtos, desde contas correntes até empréstimos,
-          estamos aqui para ajudá-lo a alcançar as suas metas financeiras.
+          We offer safe and reliable banking services to our customers.
+          With a wide range of products, from current accounts to loans,
+          we are here to help you reach your financial goals.
         </p>
 
         <div className="container">
           {/* Cartão de destaque 1 */}
           <div className="card">
-            <h3>Conta corrente</h3>
+            <h3>Checking account</h3>
             <p>
-              A nossa conta corrente oferece acesso a uma ampla gama de serviços,
-              incluindo transferências gratuitas, pagamentos on-line e suporte ao cliente 24/7.
+              Our current account offers access to a wide range of services,
+              including free transfers, online payments and 24/7 customer support.
             </p>
           </div>
 
           {/* Cartão de destaque 2 */}
           <div className="card">
-            <h3>Empréstimos</h3>
+            <h3>Loans</h3>
             <p>
-              Precisa de dinheiro para realizar os seus sonhos? Oferecemos empréstimos
-              com taxas de juros competitivas e flexibilidade nos prazos de pagamento.
+              Do you need money to make your dreams come true? We offer loans
+              with competitive interest rates and flexible payment terms.
             </p>
           </div>
 
           {/* Cartão de destaque 3 */}
           <div className="card">
-            <h3>Investimentos</h3>
+            <h3>Investments</h3>
             <p>
-              Quer aumentar o seu patrimônio? Oferecemos opções de investimento com
-              retornos atraentes.
+              Do you want to increase your equity? We offer investment options with
+              attractive returns.
             </p>
           </div>
         </div>

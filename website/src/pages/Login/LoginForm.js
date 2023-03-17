@@ -13,7 +13,7 @@ function LoginForm({ handleLogin }) {
     if (email === "user@example.com" && password === "password") {
       handleLogin();
     } else {
-      setError("Email ou senha inválidos!");
+      setError("Email or password incorrect!");
     }
   };
 
@@ -30,7 +30,7 @@ function LoginForm({ handleLogin }) {
       </label>
       <br />
       <label>
-        Senha:
+        Password:
         <input
           type="password"
           value={password}
@@ -40,7 +40,7 @@ function LoginForm({ handleLogin }) {
       </label>
       <br />
       {error && <div style={{ color: "red" }}>{error}</div>}
-      <button type="submit">Entrar</button>
+      <button type="submit">Login</button>
     </form>
   );
 }

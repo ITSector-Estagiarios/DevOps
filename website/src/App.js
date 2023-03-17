@@ -25,9 +25,9 @@ function App() {
           <Route path="/" element={<LoginPage />}>
           <Route path="" element={<Home />} />
           <Route path="home" element={<Home />} />
-          <Route path="transferencias" element={<Transferencias />} />
-          <Route path="consultarIBAN" element={<ConsultasIBAN />} />
-          <Route path="consultarOrdem" element={<ConsultasOrdem />} />
+          <Route path="transfers" element={<Transferencias />} />
+          <Route path="iban" element={<ConsultasIBAN />} />
+          <Route path="statements" element={<ConsultasOrdem />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
