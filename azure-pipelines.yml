@@ -44,3 +44,8 @@ stages:
   - job: Placeholder
     steps:
     - script: echo "Hello World"
+    - task: ManualValidation@0
+      inputs:
+        notifyUsers: 'E6022@itsector.pt'
+        instructions: 'Test'
+    - script: echo "Permission granted"
