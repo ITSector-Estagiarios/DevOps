@@ -1,39 +1,35 @@
 import React, { useState } from "react";
-import { store, authActions } from '../../_store';
-import { useDispatch } from 'react-redux';
 import './LoginForm.css';
 
 
-async function postLogin(url = '', data= {}) {
-  console.log(JSON.stringify(data))
-  await fetch(url, {
-    method: 'POST',
-    headers: {
-      "Content-type": "application/json; charset=UTF-8"
-    },
-    body: JSON.stringify(data)
-  }).then(response => {
-    console.log(response)
-    return response.ok
-  }).catch(err => {
-    console.log(err)
-    return false
-  })
-
-}
 
 //Cria a página de Login
 function LoginForm({ handleLogin }) {
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    const data = {email,password}
     event.preventDefault();
-    if (postLogin("http://localhost:4000/users/authenticate",{email,password})) {
+    await fetch("http://localhost:4000/users/authenticate", {
+      method: 'POST',
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      },
+      body: JSON.stringify(data)
+    }).then(response => {
       handleLogin();
-    }
+      return response.json()
+    }).then(
+      (result) => {
+        console.log("Hello " + result.firstName + " " + result.lastName + "!");
+        localStorage.setItem('user', JSON.stringify(result))
+      }
+    ).catch(err => {
+      console.log(err)
+      setError(err);
+    })
   };
 
   return (
