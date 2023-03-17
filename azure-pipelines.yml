@@ -9,7 +9,7 @@ trigger:
 variables:
    projectFolder: 'website'
    buildFolder: 'website/build'
-   qualityGateThreshold: '0'
+   qualityGateThreshold: $(Thresholds.codeCoverage)
 
 stages:
 - stage: Development
