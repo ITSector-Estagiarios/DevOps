@@ -22,7 +22,7 @@ stages:
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    - script: cd $(projectFolder) && npm test -- --coverage --coverageThreshold='{"global":{"statements":"$(qualityGateThreshold)"}}'
+    - script: cd $(projectFolder) && npm test -- --coverage --coverageThreshold='{\"global\":{\"statements\":\"$(qualityGateThreshold)\"}}'
       displayName: 'Test'
     - task: ArchiveFiles@2
       inputs:
