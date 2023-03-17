@@ -37,11 +37,18 @@ stages:
 - stage: QA
   dependsOn: Development
   condition: succeeded('Development')
-  pool:
-    vmImage: ubuntu-latest
-    environment: Experimental environment
   jobs:
+  - job: Approval
+    displayName: "Manual Approval"
+    pool:
+      vmImage: ubuntu-latest
+      environment: Experimental environment
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 60
+        inputs:
+          notifyUsers: 'E6022@itsector.pt'
+          instructions: 'Test'
   - job: Placeholder
     steps:
     - script: echo "Hello World"
-    
