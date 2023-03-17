@@ -15,7 +15,7 @@ stages:
   pool:
     vmImage: ubuntu-latest
   jobs:
-  - job: BuildTest
+  - job: Development
     steps:
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
@@ -23,9 +23,6 @@ stages:
       displayName: 'Build'
     - script: cd $(projectFolder) && npm test -- --coverage
       displayName: 'Test'
-
-  - job: ArchiveRelease
-    steps:
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: $(buildFolder)
