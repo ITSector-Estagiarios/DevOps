@@ -78,7 +78,7 @@ function Transferencias(){
   return (
     <div>
       <h1>Bank Transfer Page</h1>
-      <p>Current Balance: {balance}</p>
+      <p class="balance">Current Balance: {balance}</p>
       <form onSubmit={handleTransfer}>
         <label htmlFor="fromAccount">From Account:</label>
         <input
@@ -120,11 +120,11 @@ function Transferencias(){
         <br />
         <br />
 
-        <button type="submit">Transfer</button>
+        <button type="submit"><h3>Transfer</h3></button>
       </form>
       {showSuccessMessage && (
         <>
-          <p>Transfer successful! Check your account balance.</p>
+          <p class="successful">Transfer successful! Check your account balance.</p>
         </>
       )}
         <h2>Transfer History</h2>

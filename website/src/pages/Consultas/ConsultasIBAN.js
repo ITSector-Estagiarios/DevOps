@@ -18,14 +18,14 @@ function IBAN() {
     <div className="container">
       <h1>Your IBAN</h1>
       <form onSubmit={handleSubmit}>
-        <button type="submit" className="btn btn-primary mb-3">
+        <button type="IBAN">
           See IBAN
         </button>
       </form>
       {iban && (
-        <div className="alert alert-success" role="alert">
+        <p className="success">
           IBAN : {iban}
-        </div>
+        </p>
       )}
     </div>
   );
