@@ -1,27 +1,25 @@
 import React, { useState } from "react";
+import { store, authActions } from '../../_store';
 import { useDispatch } from 'react-redux';
 import './LoginForm.css';
 
 
 async function postLogin(url = '', data= {}) {
-  const response = await fetch(url, {
+  console.log(JSON.stringify(data))
+  await fetch(url, {
     method: 'POST',
-    mode: 'cors',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-    redirect: 'follow',
-    referrerPolicy: 'no-referrer',
     headers: {
       "Content-type": "application/json; charset=UTF-8"
     },
     body: JSON.stringify(data)
-  }).then(json => {
-    console.log(json)
-    return true;
+  }).then(response => {
+    console.log(response)
+    return response.ok
   }).catch(err => {
     console.log(err)
-    return false;
+    return false
   })
+
 }
 
 //Cria a página de Login
