@@ -17,11 +17,28 @@
     "web-vitals": "^2.1.4",
     "yup": "^1.0.2"
   },
+  
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
-    "eject": "react-scripts eject"
+    "coverage":"jest --coverage ",
+    "eject": "react-scripts eject",
+    "lol": "echo %npm_config_coverageThreshold%"
+  },
+  "jest": {
+      "collectCoverageFrom": [
+        "src/pages/**/*.js",
+        "src/*.js"
+      ],
+    "coverageThreshold": {
+      "global": {
+        "branches": "%npm_config_coverageThreshold%",
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
+      }
+    }
   },
   "eslintConfig": {
     "extends": [
