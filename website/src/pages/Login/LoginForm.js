@@ -34,8 +34,8 @@ function LoginForm({ handleLogin }) {
   };
   if (!error) {
     return (
-      <form onSubmit={handleSubmit} class="login-form">
-        <label class="email">
+      <form onSubmit={handleSubmit} className="login-form">
+        <label className="email">
           Email:
           <input
             type="email"
@@ -45,7 +45,7 @@ function LoginForm({ handleLogin }) {
           />
         </label>
         <br />
-        <label class="pass">
+        <label className="pass">
           Password:
           <input
             type="password"
@@ -55,13 +55,13 @@ function LoginForm({ handleLogin }) {
           />
         </label>
         <br />
-        <button type="submit" class="login">Login</button>
+        <button type="submit" className="login">Login</button>
       </form>
     );
   }
   return (
-    <form onSubmit={handleSubmit} class="login-form">
-      <label class="email">
+    <form onSubmit={handleSubmit} className="login-form">
+      <label className="email">
         Email:
         <input
           type="email"
@@ -71,7 +71,7 @@ function LoginForm({ handleLogin }) {
         />
       </label>
       <br />
-      <label class="pass">
+      <label className="pass">
         Password:
         <input
           type="password"
@@ -82,7 +82,7 @@ function LoginForm({ handleLogin }) {
       </label>
       <br />
       <div style={{ color: "red" }}>Incorrect email or password!</div>
-      <button type="submit" class="login">Login</button>
+      <button type="submit" className="login">Login</button>
     </form>
   );
 }
