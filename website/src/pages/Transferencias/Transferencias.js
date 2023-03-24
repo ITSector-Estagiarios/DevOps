@@ -77,10 +77,10 @@ function Transferencias() {
 
   return (
     <div>
-      <h1 class="title">Bank Transfer Page</h1>
-      <p class="balance">Current Balance: {balance}</p>
-      <form onSubmit={handleTransfer} class="interface">
-        <label htmlFor="fromAccount" class="from">From Account:</label>
+      <h1 className="title">Bank Transfer Page</h1>
+      <p className="balance">Current Balance: {balance}</p>
+      <form onSubmit={handleTransfer} className="interface">
+        <label htmlFor="fromAccount" className="from">From Account:</label>
         <input
           type="text"
           id="fromAccount"
@@ -93,7 +93,7 @@ function Transferencias() {
         <br />
         <br />
 
-        <label htmlFor="toAccount" class="to">To Account:</label>
+        <label htmlFor="toAccount" className="to">To Account:</label>
         <input
           type="text"
           id="toAccount"
@@ -107,7 +107,7 @@ function Transferencias() {
         <br />
         <br />
 
-        <label htmlFor="amount" class="money">Amount:</label>
+        <label htmlFor="amount" className="money">Amount:</label>
         <input
           type="text"
           id="amount"
@@ -120,14 +120,14 @@ function Transferencias() {
         <br />
         <br />
 
-        <button type="submit" class="transferir"><h3>Transfer</h3></button>
+        <button type="submit" className="transferir"><h3>Transfer</h3></button>
       </form>
       {showSuccessMessage && (
         <>
-          <p class="successful">Transfer successful! Check your account balance.</p>
+          <p className="successful">Transfer successful! Check your account balance.</p>
         </>
       )}
-      <h2 class="history">Transfer History</h2>
+      <h2 className="history">Transfer History</h2>
       <ul className="transfer-history">
         {transfers.map((transfer, index) => (
           <li key={index}>

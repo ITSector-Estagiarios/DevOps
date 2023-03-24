@@ -9,8 +9,8 @@ const Main = () => {
   };
 
   return (
-    <div class="cabeçalho">
-      <header class="main">
+    <div className="cabeçalho">
+      <header className="main">
         <nav>
           <ul>
             <li>

@@ -16,9 +16,9 @@ function IBAN() {
 
   return (
     <div className="IBAN">
-      <h1 class="check">Your IBAN</h1>
-      <form onSubmit={handleSubmit} class="form">
-        <button type="IBAN" class="see">
+      <h1 className="check">Your IBAN</h1>
+      <form onSubmit={handleSubmit} className="form">
+        <button type="IBAN" className="see">
           IBAN
         </button>
       </form>
