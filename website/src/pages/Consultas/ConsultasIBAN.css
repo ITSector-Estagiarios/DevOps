@@ -1,36 +1,36 @@
  h1.check {
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 20px;
-    text-align: center;
-  }
+   font-size: 36px;
+   font-weight: bold;
+   margin-bottom: 20px;
+   text-align: center;
+ }
 
-  button.see[type="IBAN"] {
-    padding: 10px;
-    border-radius: 50px;
-    border: none;
-    width: 200px;
-    font-size: 20px;
-    font-weight: bold;
-    background-color: #1877f2;
-    color: #fff;
-    cursor: pointer;
-    margin-top: 20px;
-    }
-  
-  button.see[type="IBAN"]:hover {
-    background-color: #028d20;
-  }
+ button.see[type="IBAN"] {
+   padding: 10px;
+   border-radius: 50px;
+   border: none;
+   width: 200px;
+   font-size: 20px;
+   font-weight: bold;
+   background-color: #1877f2;
+   color: #fff;
+   cursor: pointer;
+   margin-top: 20px;
+ }
 
-  form.form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+ button.see[type="IBAN"]:hover {
+   background-color: #028d20;
+ }
 
-  p.success{
-    margin-top: 20px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 20px;
-  }
+ form.form {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+ }
+
+ p.success {
+   margin-top: 20px;
+   text-align: center;
+   font-weight: bold;
+   font-size: 20px;
+ }

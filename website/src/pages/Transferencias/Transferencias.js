@@ -3,7 +3,7 @@ import { useState } from "react";
 import './Transferencias.css';
 
 
-function Transferencias(){
+function Transferencias() {
   const fromAccount = "985632014521";
   const [toAccount, setToAccount] = useState("");
   const [amount, setAmount] = useState("");
@@ -32,7 +32,7 @@ function Transferencias(){
       return;
     }
 
-    if ( !toAccount || !amount) {
+    if (!toAccount || !amount) {
       alert("Please fill in all fields");
       return;
     }
@@ -61,7 +61,7 @@ function Transferencias(){
   };
 
   const resetForm = () => {
-    
+
     setToAccount("");
     setAmount("");
   };
@@ -127,16 +127,16 @@ function Transferencias(){
           <p class="successful">Transfer successful! Check your account balance.</p>
         </>
       )}
-        <h2 class="history">Transfer History</h2>
-        <ul className="transfer-history">
-          {transfers.map((transfer, index) => (
-            <li key={index}>
-              <p>From Account: {transfer.fromAccount}</p>
-              <p>To Account: {transfer.toAccount}</p>
-              <p>Amount: {transfer.amount}</p>
-              <p>Date: {transfer.date}</p>
-            </li>
-          ))}
+      <h2 class="history">Transfer History</h2>
+      <ul className="transfer-history">
+        {transfers.map((transfer, index) => (
+          <li key={index}>
+            <p>From Account: {transfer.fromAccount}</p>
+            <p>To Account: {transfer.toAccount}</p>
+            <p>Amount: {transfer.amount}</p>
+            <p>Date: {transfer.date}</p>
+          </li>
+        ))}
       </ul>
     </div>
   );

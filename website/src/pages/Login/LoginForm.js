@@ -10,7 +10,7 @@ function LoginForm({ handleLogin }) {
   const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
-    const data = {email,password}
+    const data = { email, password }
     event.preventDefault();
     await fetch("http://localhost:4000/users/authenticate", {
       method: 'POST',

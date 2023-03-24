@@ -23,7 +23,8 @@ label.email {
   font-weight: bold;
 }
 
-input[type="email"], [type="password"] {
+input[type="email"],
+[type="password"] {
   padding: 10px;
   border-radius: 50px;
   border: 2px solid #1877f2;

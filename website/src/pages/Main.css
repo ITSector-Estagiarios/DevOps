@@ -1,40 +1,40 @@
 header.main {
-    background-color: #1877f2;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-  }
-  
-  div.cabeçalho nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  
-  div.cabeçalho nav li {
-    margin: 0 10px;
-  }
-  
-  div.cabeçalho nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-  }
-  
-  div.cabeçalho nav a:hover {
-    text-decoration: underline;
-  }
-  
-  header button {
-    background-color: #fff;
-    border: none;
-    border-radius: 5px;
-    color: #1877f2;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-  }
+  background-color: #1877f2;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+div.cabeçalho nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+div.cabeçalho nav li {
+  margin: 0 10px;
+}
+
+div.cabeçalho nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+div.cabeçalho nav a:hover {
+  text-decoration: underline;
+}
+
+header button {
+  background-color: #fff;
+  border: none;
+  border-radius: 5px;
+  color: #1877f2;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
