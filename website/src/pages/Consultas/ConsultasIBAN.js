@@ -11,7 +11,7 @@ function IBAN() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const user = localStorage.getItem('user');
-    const Id = '' + (JSON.parse(user).id);
+    const Id = (JSON.parse(user).id).toString();
     const data = { Id };
     await fetch('http://localhost:4001/iban', {
         method: 'POST',
