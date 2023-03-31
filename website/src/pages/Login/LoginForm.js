@@ -23,10 +23,10 @@ function LoginForm({ handleLogin }) {
         throw new Error("Wrong credentials");  
       }
       return response.json();
-    }).then(data =>{
+    }).then(responsedata =>{
       handleLogin();
-      localStorage.setItem('user', JSON.stringify(data))
-      console.log(localStorage.getItem('user'))
+      localStorage.setItem('user', JSON.stringify(responsedata))
+      console.log(JSON.stringify(responsedata))
     }).catch(error => {
       setError(error);
     });
