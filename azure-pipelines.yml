@@ -22,8 +22,8 @@ stages:
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
-      displayName: 'Test' 
+    - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+      displayName: 'Partial Test Suite' 
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: $(buildFolder)
@@ -52,4 +52,5 @@ stages:
           instructions: 'Test'
   - job: Placeholder
     steps:
-    - script: echo "Hello World"
+    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+      displayName: 'Full Test Suite'
