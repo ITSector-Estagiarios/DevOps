@@ -6,11 +6,17 @@
 trigger:
 - main
 
+parameters:
+  - name: runMutation
+    default: false
+    values:
+    - true
+    - false
+
 variables:
    projectFolder: 'website'
    buildFolder: 'website/build'
    qualityGateThreshold: $(Thresholds.codeCoverage)
-   runMutation: $(Thresholds.runMutation)
 
 stages:
 - stage: Development
@@ -61,4 +67,4 @@ stages:
       displayName: 'Full Test Suite'
     - script: cd $(projectFolder) && npm run mutation
       displayName: Mutation testing
-      condition: eq(variables.runMutation, 1)
+      condition: ${{parameters.runMutation}}
