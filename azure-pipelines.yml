@@ -59,6 +59,6 @@ stages:
       displayName: 'Build'
     - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Full Test Suite'
-    - script: cd $(projectFolder) &&
+    - script: cd $(projectFolder) && npm run mutation
       displayName: Mutation testing
-      condition: variables['runMutation']
+      condition: eq(variables.runMutation, true))
