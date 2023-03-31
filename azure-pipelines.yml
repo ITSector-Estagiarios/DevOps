@@ -40,9 +40,6 @@ stages:
           dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-    - script: cd $(Build.ArtifactStagingDirectory) && ls
-      displayName: Debug
-
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: $(Build.ArtifactStagingDirectory)
