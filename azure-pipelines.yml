@@ -7,7 +7,7 @@ trigger:
 - main
 
 parameters:
-  - name: runMutation
+  - name: runQATests
     default: false
     values:
     - true
@@ -32,13 +32,14 @@ stages:
     - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Partial Test Suite' 
     - script: cd dotNetLogin && dotnet publish -r win-x64
-      displayName: dotNet Publish
+      displayName: 'dotNet Publish'
     - task: CopyFiles@2
       inputs:
         Contents: |
           website/build/**
           dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
+      displayName: Select Release Files
 
     - task: ArchiveFiles@2
       inputs:
@@ -46,10 +47,11 @@ stages:
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
         includeRootFolder: true
+      displayName: Zip Release Files
     - task: PublishBuildArtifacts@1
       inputs:
-        artifactName: 'artifact'
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
+      displayName: Artifact Release
 
 - stage: QA
   dependsOn: Development
@@ -58,16 +60,7 @@ stages:
       vmImage: ubuntu-latest
       environment: Experimental environment
   jobs:
-  - job: Approval
-    displayName: "Manual Approval"
-    pool: server
-    steps:
-      - task: ManualValidation@0
-        timeoutInMinutes: 60
-        inputs:
-          notifyUsers: 'E6022@itsector.pt'
-          instructions: 'Test'
-  - job: Testing
+  - job: QATesting
     steps:
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
@@ -76,5 +69,14 @@ stages:
     - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Full Test Suite'
     - script: cd $(projectFolder) && npm run mutation
-      displayName: Mutation testing
-      condition: ${{parameters.runMutation}}
+      displayName: Mutation Testing
+    condition: ${{parameters.runQATests}}
+  - job: Approval
+    displayName: "Manual Approval"
+    pool: server
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 60
+        inputs:
+          notifyUsers: 'E6022@itsector.pt'
+          instructions: 'Release'
