@@ -9,7 +9,9 @@ using Consultas.Models;
 
 public interface IUserDataService
 {
-    AuthenticateResponse Authenticate(AuthenticateRequest model);
+    AuthenticateIbanResponse getIban(AuthenticateIbanRequest model);
+
+    AuthenticateExtractResponse getExtracts(AuthenticateExtractRequest model);
 }
 
 public class UserDataService : IUserDataService
@@ -21,15 +23,29 @@ public class UserDataService : IUserDataService
         new UserData { Id = 2, Iban = "PT50 1200 5600 9321 3456 1020 3" }
     };
 
-    public AuthenticateResponse Authenticate(AuthenticateRequest model)
+    private List<UserExtract> _extracts = new List<UserExtract>
+    {
+        new UserExtract { Id = 1, user_Id = 1, month = "January", year = "2022", value = 23 },
+        new UserExtract { Id = 2, user_Id = 1, month = "January", year = "2022", value = -4 },
+        new UserExtract { Id = 3, user_Id = 1, month = "February", year = "2022", value = 8 },
+        new UserExtract { Id = 4, user_Id = 1, month = "January", year = "2021", value = 5 }
+    };
+
+
+    public AuthenticateIbanResponse getIban(AuthenticateIbanRequest model)
     {
         var user = _users.SingleOrDefault(x => x.Id == (long)Convert.ToInt64(model.Id));
 
         // return null if user not found
         if (user == null) return null;
 
-        return new AuthenticateResponse(user);
+        return new AuthenticateIbanResponse(user);
     }
 
+    public AuthenticateExtractResponse getExtracts(AuthenticateExtractRequest model) {
+        var extracts = _extracts.Where( x => x.user_Id == (long)Convert.ToInt64(model.Id) && x.month == model.month && x.year == model.year).ToList();
+
+        return new AuthenticateExtractResponse(extracts);
+    }
 
 }

@@ -30,3 +30,77 @@ p {
   font-size: 1.2rem;
   margin: 1rem;
 }
+
+.monthly-statements {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+}
+
+.form-group {
+  width: 500px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+
+}
+
+.select-group {
+  font-size: 1.1em;
+  width: 200px;
+  border: 0;
+  outline: 0;
+  border-bottom: 1px solid #1877f2;
+  border-radius: 10px 10px 5px 5px;
+}
+
+.select-group option {
+  background-color: white;
+}
+
+.select-group:hover {
+  background-color: #e6effd;
+  transition: ease-in-out 300ms;
+}
+
+.select-group:active {
+  outline: 0;
+  background-color: #e6effd;
+  transition: ease-in-out 300ms;
+}
+
+.select-label {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: 2px solid #1877f2;
+  background-color: #1877f2;
+  color: white;
+  font-size: 1.4em;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+}
+
+.btn:hover {
+  transition: ease-in 100ms;
+  background-color: white;
+  color: #1877f2;
+  cursor: pointer;
+}
+
+.transactions-list {
+  width:  300px;
+  list-style: none;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.transactions-list li {
+  
+}
