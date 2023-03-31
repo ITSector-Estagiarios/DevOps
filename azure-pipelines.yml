@@ -31,9 +31,20 @@ stages:
       displayName: 'Build'
     - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Partial Test Suite' 
+    - script: cd /dotNetLogin && dotnet publish
+      displayName: dotNet Publish
+    - task: CopyFiles@2
+      displayName: Copy SPA Assets to TEMP
+      inputs:
+        SourceFolder: '$(projectFolder)'
+        Contents: |
+          /build
+          /../dotNetLogin/publish
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/release'
+
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: $(buildFolder)
+        rootFolderOrFile: $(Build.ArtifactStagingDirectory)/release
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
         includeRootFolder: true
