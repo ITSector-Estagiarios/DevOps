@@ -12,7 +12,7 @@ function LoginForm({ handleLogin }) {
   const handleSubmit = async (event) => {
     const data = { email, password }
     event.preventDefault();
-    await fetch("http://localhost:5000/users/authenticate", {
+    await fetch("http://localhost:4000/users/authenticate", {
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -25,8 +25,8 @@ function LoginForm({ handleLogin }) {
       return response.json();
     }).then(data =>{
       handleLogin();
-      console.log("Hello " + data.firstName + " " + data.lastName + "!");
       localStorage.setItem('user', JSON.stringify(data))
+      console.log(localStorage.getItem('user'))
     }).catch(error => {
       setError(error);
     });
