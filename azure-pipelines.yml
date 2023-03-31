@@ -38,11 +38,14 @@ stages:
         Contents: |
           website/build
           dotNetLogin/publish
-        TargetFolder: '$(Build.ArtifactStagingDirectory)/release'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/tmp'
+
+    - script: cd $(Build.ArtifactStagingDirectory)/tmp && ls
+      displayName: Debug
 
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: $(Build.ArtifactStagingDirectory)/release
+        rootFolderOrFile: $(Build.ArtifactStagingDirectory)/tmp
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/release.zip'
         includeRootFolder: true
