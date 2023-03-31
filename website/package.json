@@ -23,7 +23,7 @@
     "test": "jest",
     "coverage": "jest --coverage ",
     "eject": "react-scripts eject",
-    "mutation":"stryker run",
+    "mutation": "stryker run",
     "lol": "node -e \"const val =  parseInt(%npm_config_coveragethreshold%); console.log(val)\""
   },
   "jest": {
