@@ -4,9 +4,7 @@ import { useState } from "react";
 
 function IBAN() {
   const [iban, setIban] = useState("");
-  const [error, setError] = useState("");
-
-  const delay = ms => new Promise(res => setTimeout(res, ms));
+  const [error, setError] = useState(Error());
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -21,13 +19,15 @@ function IBAN() {
         body: JSON.stringify(data)
       }).then(response => {
         if (!response.ok) {
-          throw new Error("There was an error");  
+          throw Error("There was an error");  
         }
         return response.json();
       }).then(responsedata =>{
         console.log(JSON.stringify(responsedata))
+        setError("")
         setIban(responsedata.iban);
       }).catch(error => {
+        setIban("");
         setError(error);
       });
     
@@ -43,6 +43,13 @@ function IBAN() {
           IBAN
         </button>
       </form>
+      {
+        error && (
+          <p>
+            {error.message}
+          </p>
+        )
+      }
       {iban && (
         <p className="success">
           IBAN : {iban}

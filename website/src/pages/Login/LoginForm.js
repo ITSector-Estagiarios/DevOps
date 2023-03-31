@@ -20,7 +20,7 @@ function LoginForm({ handleLogin }) {
       body: JSON.stringify(data)
     }).then(response => {
       if (!response.ok) {
-        throw new Error("Wrong credentials");  
+        throw Error("Wrong credentials");  
       }
       return response.json();
     }).then(responsedata =>{
