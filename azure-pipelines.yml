@@ -61,4 +61,4 @@ stages:
       displayName: 'Full Test Suite'
     - script: cd $(projectFolder) && npm run mutation
       displayName: Mutation testing
-      condition: eq(variables.runMutation, true))
+      condition: eq(variables.runMutation, false))
