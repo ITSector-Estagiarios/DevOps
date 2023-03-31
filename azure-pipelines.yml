@@ -37,7 +37,7 @@ stages:
       inputs:
         Contents: |
           website/build/**
-          dotNetLogin/bin/Debug/net6.0/publish/**
+          dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
     - script: cd $(Build.ArtifactStagingDirectory) && ls
