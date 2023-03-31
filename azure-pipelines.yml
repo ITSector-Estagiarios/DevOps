@@ -48,6 +48,7 @@ stages:
         includeRootFolder: true
     - task: PublishBuildArtifacts@1
       inputs:
+        artifactName: 'artifact'
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
 
 - stage: QA
