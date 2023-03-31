@@ -35,10 +35,9 @@ stages:
       displayName: dotNet Publish
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(projectFolder)'
         Contents: |
-          /build
-          /../dotNetLogin/publish
+          website/build
+          dotNetLogin/publish
         TargetFolder: '$(Build.ArtifactStagingDirectory)/release'
 
     - task: ArchiveFiles@2
