@@ -9,10 +9,10 @@ public class AuthenticateRequest
 
     [Required]
     public string fromAccount { get; set; }
+
     [Required]
     public string toAccount { get; set; }
+
     [Required]
     public string date { get; set; }
-
-
 }
