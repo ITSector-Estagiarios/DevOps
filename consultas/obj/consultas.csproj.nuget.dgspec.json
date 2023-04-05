@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\consultas\\consultas.csproj": {}
+    "C:\\Users\\E6024\\Desktop\\DevOps\\consultas\\consultas.csproj": {}
   },
   "projects": {
-    "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\consultas\\consultas.csproj": {
+    "C:\\Users\\E6024\\Desktop\\DevOps\\consultas\\consultas.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\consultas\\consultas.csproj",
+        "projectUniqueName": "C:\\Users\\E6024\\Desktop\\DevOps\\consultas\\consultas.csproj",
         "projectName": "consultas",
-        "projectPath": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\consultas\\consultas.csproj",
-        "packagesPath": "C:\\Users\\E6023\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\consultas\\obj\\",
+        "projectPath": "C:\\Users\\E6024\\Desktop\\DevOps\\consultas\\consultas.csproj",
+        "packagesPath": "C:\\Users\\E6024\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\E6024\\Desktop\\DevOps\\consultas\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\E6023\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\E6024\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -72,7 +72,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.407\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.406\\RuntimeIdentifierGraph.json"
         }
       }
     }
