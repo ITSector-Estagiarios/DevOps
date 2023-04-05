@@ -1,12 +1,14 @@
 # ITSector 
 
-## run.sh
+## Scripts
 
-Para executar no VSCode
+Para executar run.bat no VSCode
 
-* Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-* Set-ItemProperty -Path .\run.sh -Name IsReadOnly -Value $false
-* ./run.sh
+* ./run.bat
+
+Para executar stop.bat no VSCode
+
+* ./stop.bat
 
 
 ## Domains e subdomains
