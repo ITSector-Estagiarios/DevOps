@@ -2,11 +2,11 @@
 
 ## Scripts
 
-Para executar run.bat no VSCode
+Para correr o site
 
 * ./run.bat
 
-Para executar stop.bat no VSCode
+Para parar o site
 
 * ./stop.bat
 
