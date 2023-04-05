@@ -12,7 +12,7 @@ function LoginForm({ handleLogin }) {
   const handleSubmit = async (event) => {
     const data = { email, password }
     event.preventDefault();
-    await fetch("http://localhost:5000/users/authenticate", {
+    await fetch("http://localhost:4000/users/authenticate", {
       method: 'POST',
       headers: {
         "Content-type": "application/json; charset=UTF-8"
@@ -20,13 +20,13 @@ function LoginForm({ handleLogin }) {
       body: JSON.stringify(data)
     }).then(response => {
       if (!response.ok) {
-        throw new Error("Wrong credentials");  
+        throw Error("Wrong credentials");  
       }
       return response.json();
-    }).then(data =>{
+    }).then(responsedata =>{
       handleLogin();
-      console.log("Hello " + data.firstName + " " + data.lastName + "!");
-      localStorage.setItem('user', JSON.stringify(data))
+      localStorage.setItem('user', JSON.stringify(responsedata))
+      console.log(JSON.stringify(responsedata))
     }).catch(error => {
       setError(error);
     });

@@ -4,14 +4,35 @@ import { useState } from "react";
 
 function IBAN() {
   const [iban, setIban] = useState("");
+  const [error, setError] = useState(Error());
 
-  function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const user = localStorage.getItem('user');
+    const Id = (JSON.parse(user).id).toString();
+    const data = { Id };
+    await fetch('http://localhost:4001/iban', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      }).then(response => {
+        if (!response.ok) {
+          throw Error("There was an error");  
+        }
+        return response.json();
+      }).then(responsedata =>{
+        console.log(JSON.stringify(responsedata))
+        setError("")
+        setIban(responsedata.iban);
+      }).catch(error => {
+        setIban("");
+        setError(error);
+      });
+    
     // Aqui, pode se adicionar a lógica para buscar o IBAN do cliente na base de dados.
     // e definir o valor de "iban" com o resultado da busca
-
-    setIban("PT50 1234 5678 9012 3456 7890 1");
   }
 
   return (
@@ -22,6 +43,13 @@ function IBAN() {
           IBAN
         </button>
       </form>
+      {
+        error && (
+          <p>
+            {error.message}
+          </p>
+        )
+      }
       {iban && (
         <p className="success">
           IBAN : {iban}
