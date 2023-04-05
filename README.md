@@ -1,5 +1,14 @@
 # ITSector 
 
+## run.sh
+
+Para executar no VSCode
+
+* Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+* Set-ItemProperty -Path .\run.sh -Name IsReadOnly -Value $false
+* ./run.sh
+
+
 ## Domains e subdomains
 
 | Consultas | Transferências | Pagamentos | Autenticação | Gerir Conta | Gerir Cartões | Notificações
