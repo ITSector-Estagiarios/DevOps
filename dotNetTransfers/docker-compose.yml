@@ -3,10 +3,10 @@
 version: '3.4'
 
 services:
-  consultasapi:
-    image: ibanapi
+  transferapi:
+    image: transferapi
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - 4001:4001
+      - 4002:4002

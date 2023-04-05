@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj": {}
+    "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj": {}
   },
   "projects": {
-    "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj": {
+    "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
+        "projectUniqueName": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
         "projectName": "dotNetTransfers",
-        "projectPath": "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
+        "projectPath": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
         "packagesPath": "C:\\Users\\E6023\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\obj\\",
+        "outputPath": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\E6023\\AppData\\Roaming\\NuGet\\NuGet.Config"

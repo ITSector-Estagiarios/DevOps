@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 
-namespace TransfersController.Controllers
+namespace Transfer.Controllers
 
 {
     [ApiController]
@@ -51,7 +51,7 @@ namespace TransfersController.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
-            return Ok("Transfer successful! Check your account balance.");
+            return Ok(new { balance });
         }
     }
 

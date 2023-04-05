@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lu9Ja/y6KY4F5B16ZlfobcQDxVELo8gDdIrrYKPIgVF8l1zGW1XGFRvLZTy8ivUcrP6wiM+ZrAlLgkKd2px9ag==",
+  "dgSpecHash": "R0fxvlG0lZXKFSKq8/LIKe/M7UhP1y8HsEP00aJ5+0+m2OU5ASRxxe+w84BD3f3p/V4Mbh1ApxyxYsOlkpGpUA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\E6023\\Desktop\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
+  "projectFilePath": "C:\\Users\\E6023\\Desktop\\DevOps\\DevOps\\dotNetTransfers\\dotNetTransfers.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\E6023\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\E6023\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

@@ -44,12 +44,12 @@ function Transferencias() {
         headers: {
           "Content-Type": "application/json"
         },
-        //body: JSON.stringify(newTransfer)
+        body: JSON.stringify(newTransfer)
       })
         .then((response) => response.json())
         .then((data) => {
           setTransfers([...transfers, data]);
-          setBalance(balance - transferAmount);
+          setBalance(data.balance);
           setShowSuccessMessage(true);
           resetForm();
         })

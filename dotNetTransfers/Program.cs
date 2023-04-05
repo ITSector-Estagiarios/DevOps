@@ -31,4 +31,4 @@ app.MapControllers();*/
     app.MapControllers();
 }
 
-app.Run("http://localhost:4002");
+app.Run();
