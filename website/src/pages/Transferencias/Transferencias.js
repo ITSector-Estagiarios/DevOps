@@ -1,7 +1,5 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from 'react';
 import './Transferencias.css';
-
 
 function Transferencias() {
   const fromAccount = "985632014521";
@@ -9,40 +7,27 @@ function Transferencias() {
   const [amount, setAmount] = useState("");
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [balance, setBalance] = useState(100000);
-  const [transfers, setTransfers] = useState([
-    {
-      fromAccount: "985632014521",
-      toAccount: "127456214563",
-      amount: 500,
-      date: "2023-03-03",
-    },
-    {
-      fromAccount: "985632014521",
-      toAccount: "847516329548",
-      amount: 1000,
-      date: "2023-03-02",
-    },
-  ]);
+  const [transfers, setTransfers] = useState([]);
 
   const handleTransfer = (event) => {
     event.preventDefault();
-
+  
     if (toAccount === fromAccount) {
       alert("You cannot transfer money to the same account.");
       return;
     }
-
+  
     if (!toAccount || !amount) {
       alert("Please fill in all fields");
       return;
     }
-
+  
     const transferAmount = parseInt(amount);
     if (isNaN(transferAmount) || transferAmount <= 0) {
       alert("Please enter a valid transfer amount");
       return;
     }
-
+  
     if (transferAmount > balance) {
       alert("You don't have enough balance for this transfer");
     } else {
@@ -50,18 +35,29 @@ function Transferencias() {
       const newTransfer = {
         fromAccount,
         toAccount,
-        amount: transferAmount,
-        date,
+        amount,
+        date
       };
-      setTransfers([...transfers, newTransfer]);
-      setBalance(balance - transferAmount);
-      setShowSuccessMessage(true);
-      resetForm();
+      console.log(JSON.stringify(newTransfer))
+      fetch("http://localhost:4002/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        //body: JSON.stringify(newTransfer)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setTransfers([...transfers, data]);
+          setBalance(balance - transferAmount);
+          setShowSuccessMessage(true);
+          resetForm();
+        })
+        .catch((error) => console.log(error));
     }
   };
 
   const resetForm = () => {
-
     setToAccount("");
     setAmount("");
   };
@@ -85,8 +81,8 @@ function Transferencias() {
           type="text"
           id="fromAccount"
           name="fromAccount"
-          value={985632014521}
-          onKeyPress={handleKeyPress}
+          value={fromAccount}
+          readOnly
           minLength={12}
           maxLength={12}
         />
@@ -127,21 +123,8 @@ function Transferencias() {
           <p className="successful">Transfer successful! Check your account balance.</p>
         </>
       )}
-      <h2 className="history">Transfer History</h2>
-      <ul className="transfer-history">
-        {transfers.map((transfer, index) => (
-          <li key={index}>
-            <p>From Account: {transfer.fromAccount}</p>
-            <p>To Account: {transfer.toAccount}</p>
-            <p>Amount: {transfer.amount}</p>
-            <p>Date: {transfer.date}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
+      </div>
   );
 }
-
-
 
 export default Transferencias;
