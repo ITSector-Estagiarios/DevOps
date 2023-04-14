@@ -4,6 +4,7 @@
 
 Para correr o site
 
+* (pode ser necessário) cd website && npm install react-scripts
 * ./run.bat
 
 Para parar o site
