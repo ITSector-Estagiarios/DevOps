@@ -31,13 +31,13 @@ stages:
       displayName: 'Build'
     - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Partial Test Suite' 
-    - script: cd dotNetLogin && dotnet publish -r win-x64
+    - script: cd dotNetServices/dotNetLogin && dotnet publish -r win-x64
       displayName: 'dotNet Publish'
     - task: CopyFiles@2
       inputs:
         Contents: |
           website/build/**
-          dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
+          dotNetServices/dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       displayName: Select Release Files
 
