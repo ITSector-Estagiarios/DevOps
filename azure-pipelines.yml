@@ -33,13 +33,13 @@ stages:
       displayName: 'Partial Test Suite' 
     - script: cd dotNetServices && for d in */; do (cd "$d" && dotnet publish -r win-x64 --output OutputExe --self-contained -c Release /p:PublishSingleFile=true /p:AssemblyName="mydotnet_${d%/}" && pwd); done
       displayName: 'dotNet Publish'
-    - script: mkdir -p ../save && for d in */OutputExe/; do (cd "$d" && cp -r *.exe  ../../../save/ ); done   
+    - script: cd dotNetServices && mkdir -p ../save && for d in */OutputExe/; do (cd "$d" && cp -r *.exe  ../../../save/ ); done   
       displayName: Gathering Published Executables
     - task: CopyFiles@2
       inputs:
         Contents: |
           website/build/**
-          dotNetServices/dotNetLogin/bin/Debug/net6.0/win-x64/publish/**
+          save/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       displayName: Select Release Files
 
