@@ -25,7 +25,7 @@ function LoginForm({ handleLogin }) {
       return response.json();
     }).then(responsedata =>{
       handleLogin();
-      localStorage.setItem('user', JSON.stringify(responsedata))
+      localStorage.setItem("user", JSON.stringify(responsedata))
       console.log(JSON.stringify(responsedata))
     }).catch(error => {
       setError(error);

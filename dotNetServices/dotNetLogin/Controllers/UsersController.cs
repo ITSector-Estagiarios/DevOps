@@ -26,6 +26,16 @@ public class UsersController : ControllerBase
 
         return Ok(response);
     }
+    [HttpPost("verify")]
+    public IActionResult verifyToken(verifyTokenRequest model)
+    {
+        if (_userService.verifyToken(model.user, model.token).Result) {
+            return Ok();
+        }
+        else {
+            return BadRequest();
+        }
+    }
 
     [Authorize]
     [HttpGet]

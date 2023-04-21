@@ -32,11 +32,14 @@ function Transferencias() {
       alert("You don't have enough balance for this transfer");
     } else {
       const date = new Date().toISOString().slice(0, 10);
+      const user = localStorage.getItem("user");
+      const token = JSON.parse(user).token;
       const newTransfer = {
         fromAccount,
         toAccount,
         amount,
-        date
+        date,
+        token
       };
       console.log(JSON.stringify(newTransfer))
       fetch("http://localhost:4002/transfer", {

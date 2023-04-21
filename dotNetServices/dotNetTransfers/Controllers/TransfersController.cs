@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Dapr.Client;
+using Transfer.Models;
 
 namespace Transfer.Controllers
 
@@ -17,8 +20,11 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public ActionResult Post([FromBody] TransferRequest request)
+        public ActionResult Post(TransferRequest request)
         {
+            if (!verifyToken(request.token).Result) {
+                return BadRequest("Invalid user.");
+            }
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
@@ -53,19 +59,31 @@ namespace Transfer.Controllers
 
             return Ok(new { balance });
         }
+
+
+        async private Task<bool> verifyToken(string token) {
+
+            var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
+            //Check token
+            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { token = token } );
+
+
+            Console.WriteLine(response);
+
+            return response.IsSuccessStatusCode;
+        }
+
+
     }
+
+    
 
     public class Transfer
     {
-        public string FromAccount { get; set; }
-        public string ToAccount { get; set; }
+        public string? FromAccount { get; set; }
+        public string? ToAccount { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
 
-    public class TransferRequest
-    {
-        public string ToAccount { get; set; }
-        public string Amount { get; set; }
-    }
 }
