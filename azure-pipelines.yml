@@ -31,8 +31,10 @@ stages:
       displayName: 'Build'
     - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
       displayName: 'Partial Test Suite' 
-    - script: cd dotNetServices/dotNetLogin && dotnet publish -r win-x64
+    - script: cd dotNetServices && for d in */; do (cd "$d" && dotnet publish -r win-x64 --output OutputExe --self-contained -c Release /p:PublishSingleFile=true /p:AssemblyName="mydotnet_${d%/}" && pwd); done
       displayName: 'dotNet Publish'
+    - script: mkdir -p ../save && for d in */OutputExe/; do (cd "$d" && cp -r *.exe  ../../../save/ ); done   
+      displayName: Gathering Published Executables
     - task: CopyFiles@2
       inputs:
         Contents: |
