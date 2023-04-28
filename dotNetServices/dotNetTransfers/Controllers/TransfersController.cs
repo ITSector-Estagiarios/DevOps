@@ -61,7 +61,7 @@ namespace Transfer.Controllers
                 {
                     new { to = new List<dynamic> { new { email = "recipient@example.com" } } }
                 },
-                from = new { email = "sender@example.com" },
+                from = new { email = "joao.felix@itsector.pt" },
                 subject = "Transfer request",
                 content = new List<dynamic>
                 {
