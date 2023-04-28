@@ -22,9 +22,6 @@ namespace Transfer.Controllers
         [HttpPost("transfer")]
         public ActionResult Post(TransferRequest request)
         {
-            if (!verifyToken(request.token).Result) {
-                return BadRequest("Invalid user.");
-            }
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
@@ -58,19 +55,6 @@ namespace Transfer.Controllers
             balance -= transferAmount;
 
             return Ok(new { balance });
-        }
-
-
-        async private Task<bool> verifyToken(string token) {
-
-            var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
-            //Check token
-            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { token = token } );
-
-
-            Console.WriteLine(response);
-
-            return response.IsSuccessStatusCode;
         }
 
 

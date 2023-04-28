@@ -33,7 +33,7 @@ function Transferencias() {
     } else {
       const date = new Date().toISOString().slice(0, 10);
       const user = localStorage.getItem("user");
-      const token = JSON.parse(user).token;
+      const token = JSON.parse(user).Token;
       const newTransfer = {
         fromAccount,
         toAccount,
