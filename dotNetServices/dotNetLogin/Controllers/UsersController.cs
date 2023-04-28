@@ -29,7 +29,7 @@ public class UsersController : ControllerBase
     [HttpPost("verify")]
     public IActionResult verifyToken(verifyTokenRequest model)
     {
-        if (_userService.verifyToken(model.user, model.token).Result) {
+        if (_userService.verifyToken(model.email, model.token).Result) {
             return Ok();
         }
         else {

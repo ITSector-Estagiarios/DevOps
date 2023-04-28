@@ -1,4 +1,5 @@
-﻿using WebApi.Helpers;
+﻿using Microsoft.Extensions.DependencyInjection;
+using WebApi.Helpers;
 using WebApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
     var services = builder.Services;
     services.AddCors();
     services.AddControllers();
-
+    services.AddControllers().AddJsonOptions(o => o.JsonSerializerOptions.PropertyNamingPolicy = null).AddDapr();
     // configure strongly typed settings object
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 

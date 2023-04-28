@@ -15,7 +15,7 @@ public interface IUserService
     AuthenticateResponse Authenticate(AuthenticateRequest model);
     IEnumerable<User> GetAll();
     User GetById(int id);
-    Task<bool> verifyToken(string username, string token);
+    Task<bool> verifyToken(string email, string token);
 }
 
 public class UserService : IUserService
@@ -43,6 +43,9 @@ public class UserService : IUserService
 
         // authentication successful so generate jwt token
         string token = generateJwtToken(user);
+        if (!storeToken(model.email, token).Result) return null;
+
+        Console.WriteLine(verifyToken(model.email, token).Result);
 
 
         return new AuthenticateResponse(user, token);
@@ -74,22 +77,20 @@ public class UserService : IUserService
         return tokenHandler.WriteToken(token);
     }
 
-    async public Task<bool> verifyToken(string username, string token) {
+    async public Task<bool> verifyToken(string email, string token) {
 
         var client = new DaprClientBuilder().Build();
 
-        var state = await client.GetStateAsync<dynamic>("statestore", username);
+        var state = await client.GetStateAsync<dynamic>("statestore", email);
 
-        return state.token.Equals(token).Result;
+        return state.ToString() == token;
     }
 
-    async private Task<bool> storeToken(string username, string token) {
+    async private Task<bool> storeToken(string email, string token) {
         var client = new DaprClientBuilder().Build();
 
-        var stateOptions = new StateOptions(TimeSpan.FromSeconds(30));
-
         try {
-            await client.save_state("statestore", username, token, state_metadata={'ttlInSecods': '120'});
+            await client.SaveStateAsync("statestore", email, token);
 
             return true;
         }
