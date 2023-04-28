@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Dapr.Client;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models;
@@ -14,6 +15,7 @@ public interface IUserService
     AuthenticateResponse Authenticate(AuthenticateRequest model);
     IEnumerable<User> GetAll();
     User GetById(int id);
+    Task<bool> verifyToken(string email, string token);
 }
 
 public class UserService : IUserService
@@ -40,7 +42,11 @@ public class UserService : IUserService
         if (user == null) return null;
 
         // authentication successful so generate jwt token
-        var token = generateJwtToken(user);
+        string token = generateJwtToken(user);
+        if (!storeToken(model.email, token).Result) return null;
+
+        Console.WriteLine(verifyToken(model.email, token).Result);
+
 
         return new AuthenticateResponse(user, token);
     }
@@ -56,7 +62,6 @@ public class UserService : IUserService
     }
 
     // helper methods
-
     private string generateJwtToken(User user)
     {
         // generate token that is valid for 7 days
@@ -70,5 +75,29 @@ public class UserService : IUserService
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    async public Task<bool> verifyToken(string email, string token) {
+
+        var client = new DaprClientBuilder().Build();
+
+        var state = await client.GetStateAsync<dynamic>("statestore", email);
+
+        return state.ToString() == token;
+    }
+
+    async private Task<bool> storeToken(string email, string token) {
+        var client = new DaprClientBuilder().Build();
+
+        try {
+            await client.SaveStateAsync("statestore", email, token);
+
+            return true;
+        }
+        catch (Exception ex) {
+            Console.WriteLine($"Error saving state: {ex.Message}");
+            return false;
+        }
+
     }
 }
