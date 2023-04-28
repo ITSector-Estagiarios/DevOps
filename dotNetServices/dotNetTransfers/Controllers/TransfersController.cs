@@ -6,7 +6,6 @@ using Dapr.Client;
 using Transfer.Models;
 
 namespace Transfer.Controllers
-
 {
     [ApiController]
     public class TransfersController : ControllerBase
@@ -20,7 +19,7 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public ActionResult Post(TransferRequest request)
+        public async Task<ActionResult> Post(TransferRequest request)
         {
             if (request.ToAccount == fromAccount)
             {
@@ -54,13 +53,27 @@ namespace Transfer.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
+            // send email notification
+            var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
+            var data = new
+            {
+                personalizations = new List<dynamic>
+                {
+                    new { to = new List<dynamic> { new { email = "recipient@example.com" } } }
+                },
+                from = new { email = "sender@example.com" },
+                subject = "Transfer request",
+                content = new List<dynamic>
+                {
+                    new { type = "A transfer request was made in the amount of ", value = emailContent }
+                }
+            };
+            using var client = new DaprClientBuilder().Build();
+            await client.PublishEventAsync("my-sendgrid-binding", "create", data);
+
             return Ok(new { balance });
         }
-
-
     }
-
-    
 
     public class Transfer
     {
@@ -69,5 +82,4 @@ namespace Transfer.Controllers
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
-
 }
