@@ -25,6 +25,14 @@ stages:
   jobs:
   - job: Development
     steps:
+    - task: AzureFileCopy@5
+      inputs:
+        SourcePath: '/'
+        azureSubscription: 'connection'
+        Destination: 'AzureBlob'
+        storage: 'itsectorfeupexample'
+        ContainerName: 'vhds'
+        CleanTargetBeforeCopy: true
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
@@ -35,14 +43,7 @@ stages:
       displayName: 'dotNet Publish'
     - script: cd dotNetServices && mkdir -p ../save && for d in */OutputExe/; do (mkdir -p ../save/$d && cd "$d" && cp -r * ../../../save/$d ); done  
       displayName: Gathering Published Executables
-    - task: AzureFileCopy@5
-      inputs:
-        SourcePath: 'website/build'
-        azureSubscription: 'connection'
-        Destination: 'AzureBlob'
-        storage: 'itsectorfeupexample'
-        ContainerName: 'vhds'
-        CleanTargetBeforeCopy: true
+    
     - task: CopyFiles@2
       inputs:
         Contents: |
