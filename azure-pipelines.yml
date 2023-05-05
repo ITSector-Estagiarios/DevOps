@@ -35,7 +35,7 @@ stages:
         storage: 'itsectorfeupexample'
         ContainerName: 'vhds'
         CleanTargetBeforeCopy: true
-        outputStorageContainerSasToken: sp=r&st=2023-05-05T15:03:31Z&se=2023-05-05T23:03:31Z&sv=2022-11-02&sr=c&sig=2ms4UV1RK57e1qSdugYX%2FvavJigKNDXZ63bw%2Fe5LVRM%3D'
+        outputStorageContainerSasToken: 'se=2023-05-08&sp=racwd&sv=2021-06-08&sr=b&skoid=30e7551b-48a9-4842-871f-58030a36e838&sktid=f06ed7e8-2a33-433c-8e90-69f6fba89365&skt=2023-05-05T15%3A10%3A51Z&ske=2023-05-08T00%3A00%3A00Z&sks=b&skv=2021-06-08&sig=4rDob3UvwSAu0ioF9Z8eC0bBrCIQ%2BbRxMiFTdujZTy8%3D'
 
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
