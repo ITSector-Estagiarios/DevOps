@@ -27,7 +27,7 @@ stages:
     steps:
     - script: echo Hi > helloworld.txt
       displayName: 'BS'
-    - task: AzureFileCopy@5
+    - task: AzureFileCopy@3
       inputs:
         SourcePath: 'helloworld.txt'
         azureSubscription: 'connection'
@@ -35,6 +35,10 @@ stages:
         storage: 'itsectorfeupexample'
         ContainerName: 'vhds'
         CleanTargetBeforeCopy: true
+        AdditionalArgumentsForBlobCopy: 
+        outputStorageUri: 'https://itsectorfeupexample.blob.core.windows.net/vhds?sp=racwdli&st=2023-05-05T13:04:11Z&se=2023-05-05T21:04:11Z&sv=2022-11-02&sr=c&sig=B9r959V41pJlHoLw88Cw7U6tfgkv0TxbK030lO3ZM4k%3D'
+        outputStorageContainerSasToken: 'sp=racwdli&st=2023-05-05T13:04:11Z&se=2023-05-05T21:04:11Z&sv=2022-11-02&sr=c&sig=B9r959V41pJlHoLw88Cw7U6tfgkv0TxbK030lO3ZM4k%3D'
+
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
