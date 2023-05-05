@@ -2,7 +2,7 @@
 
 $Company = 'itsector-tfs02'
 $projectName = 'DevOps%20Role%20Play'
-$MyPat = '$args[0]
+$MyPat = '$args[0]'
 
 $variableGroupName = "vars"
 $variableName = "test"
