@@ -27,7 +27,7 @@ stages:
     steps:
     - script: echo Hi > helloworld.txt
       displayName: 'BS'
-    - task: AzureFileCopy@3
+    - task: AzureFileCopy@5
       inputs:
         SourcePath: 'helloworld.txt'
         azureSubscription: 'connection'
