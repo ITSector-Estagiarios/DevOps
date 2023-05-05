@@ -27,7 +27,7 @@ stages:
     steps:
     - script: echo Hi > helloworld.txt
       displayName: 'BS'
-    - task: AzureFileCopy@5
+    - task: AzureFileCopy@3
       inputs:
         SourcePath: 'helloworld.txt'
         azureSubscription: 'connection'
@@ -35,6 +35,7 @@ stages:
         storage: 'itsectorfeupexample'
         ContainerName: 'vhds'
         CleanTargetBeforeCopy: true
+        outputStorageContainerSasToken: sp=r&st=2023-05-05T15:03:31Z&se=2023-05-05T23:03:31Z&sv=2022-11-02&sr=c&sig=2ms4UV1RK57e1qSdugYX%2FvavJigKNDXZ63bw%2Fe5LVRM%3D'
 
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
