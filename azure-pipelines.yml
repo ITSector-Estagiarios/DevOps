@@ -27,6 +27,13 @@ stages:
     steps:
     - script: echo Hi > helloworld.txt
       displayName: 'BS'
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'connection'
+        scriptType: 'ps'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az storage blob generate-sas --account-name itsectorfeupexample --container-name vhds --name blob --permissions acdrw --expiry 2023-05-08 --auth-mode login --as-user'
+        powerShellErrorActionPreference: 'continue'
     - task: AzureFileCopy@3
       inputs:
         SourcePath: 'helloworld.txt'
