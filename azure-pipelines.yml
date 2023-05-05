@@ -34,7 +34,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: 'az storage blob generate-sas --account-name itsectorfeupexample --container-name vhds --name blob --permissions acdrw --expiry 2023-05-08 --auth-mode login --as-user > sas.txt'
         powerShellErrorActionPreference: 'continue'
-    - script: type sas.txt
+    - script: echo %cd% && type sas.txt
       displayName: Debug
     - task: AzureFileCopy@3
       inputs:
