@@ -5,7 +5,7 @@ $projectName = 'DevOps%20Role%20Play'
 $MyPat = '$args[0]'
 
 $variableGroupName = "vars"
-$variableName = "test"
+$variableName = "sas"
 $newVariableValue = Get-Content -Path "/a/1/s/sas.txt"
 
 $B64Pat = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$MyPat"))
