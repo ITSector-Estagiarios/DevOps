@@ -25,9 +25,11 @@ stages:
   jobs:
   - job: Development
     steps:
+    - script: echo Hi > helloworld.txt
+      displayName: 'BS'
     - task: AzureFileCopy@5
       inputs:
-        SourcePath: '/'
+        SourcePath: 'helloworld.txt'
         azureSubscription: 'connection'
         Destination: 'AzureBlob'
         storage: 'itsectorfeupexample'
