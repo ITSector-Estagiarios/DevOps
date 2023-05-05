@@ -6,7 +6,7 @@ $MyPat = '$args[0]'
 
 $variableGroupName = "vars"
 $variableName = "test"
-$newVariableValue = "33"
+$newVariableValue = Get-Content -Path "/a/1/s/sas.txt"
 
 $B64Pat = [Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes(":$MyPat"))
 $headers = @{
