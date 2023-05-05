@@ -17,6 +17,7 @@ variables:
    projectFolder: 'website'
    buildFolder: 'website/build'
    qualityGateThreshold: $(Thresholds.codeCoverage)
+   pat: $(PAT.marcopat)
 
 stages:
 - stage: Development
@@ -44,7 +45,7 @@ stages:
           
           $Company = 'itsector-tfs02'
           $projectName = 'DevOps%20Role%20Play'
-          $MyPat = 'wyuptul4oqltnd5re7wzegc6is3h7skzbnbzmw5n76wx2qchoowa'
+          $MyPat = $pat
           
           $variableGroupName = "vars"
           $variableName = "sas"
