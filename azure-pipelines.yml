@@ -40,7 +40,7 @@ stages:
     - task: PowerShell@2
       inputs:
         filePath: 'variable.ps1'
-        arguments: '$pat'
+        arguments: -Pat '$pat'
     - task: AzureFileCopy@3
       inputs:
         SourcePath: 'helloworld.txt'
