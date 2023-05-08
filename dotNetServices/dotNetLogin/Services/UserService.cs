@@ -110,7 +110,6 @@ public class UserService : IUserService
         var client = new DaprClientBuilder().Build();
         string jsonString = JsonSerializer.Serialize(user);
         try {
-            Console.WriteLine("Login: " + Guid);
             await client.SaveStateAsync("statestore", Guid, jsonString);
             
             return true;

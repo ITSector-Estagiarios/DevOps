@@ -23,7 +23,6 @@ function IBAN() {
         }
         return response.json();
       }).then(responsedata =>{
-        console.log(JSON.stringify(responsedata))
         setError("")
         setIban(responsedata.iban);
       }).catch(error => {
