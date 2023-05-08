@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using Dapr.Client;
 using WebApi.Entities;
 using WebApi.Helpers;
@@ -107,10 +108,10 @@ public class UserService : IUserService
 
     async private Task<bool> storeUser(string Guid, User user) {
         var client = new DaprClientBuilder().Build();
-
+        string jsonString = JsonSerializer.Serialize(user);
         try {
             Console.WriteLine("Login: " + Guid);
-            await client.SaveStateAsync("statestore", Guid, user);
+            await client.SaveStateAsync("statestore", Guid, jsonString);
             
             return true;
         }

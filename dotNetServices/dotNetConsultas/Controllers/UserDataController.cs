@@ -64,10 +64,11 @@ public class UserDataController : ControllerBase
     async private Task<int> getUserId(string guid) {
         var client = new DaprClientBuilder().Build();
         Console.WriteLine("Consulta: " + guid);
-        User result = await client.GetStateAsync<User>("statestore", guid);
-        if (result == null) return 0;
+        string jsonString = await client.GetStateAsync<string>("statestore", guid);
+        Console.WriteLine(jsonString);
+        if (jsonString == null) return 0;
 
-        return result.Id;
+        return 1;
     }
 
     private class TokenResponse {
