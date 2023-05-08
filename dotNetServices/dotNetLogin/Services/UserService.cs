@@ -109,8 +109,9 @@ public class UserService : IUserService
         var client = new DaprClientBuilder().Build();
 
         try {
+            Console.WriteLine("Login: " + Guid);
             await client.SaveStateAsync("statestore", Guid, user);
-
+            
             return true;
         }
         catch (Exception ex) {
