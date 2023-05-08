@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Dapr.Client;
 using Transfer.Models;
+using System.Text.Json;
 
 namespace Transfer.Controllers
 {
@@ -59,17 +57,30 @@ namespace Transfer.Controllers
             {
                 personalizations = new List<dynamic>
                 {
-                    new { to = new List<dynamic> { new { email = "user@email.com" } } }
+                    new
+                    {
+                        to = new List<dynamic>
+                        {
+                            new { email = "user@email.com" }
+                        }
+                    }
                 },
                 from = new { email = "joao.felix@itsector.pt" },
                 subject = "Transfer request",
                 content = new List<dynamic>
                 {
-                    new { type = "A transfer request was made in the amount of ", value = emailContent }
+                    new
+                    {
+                        type = "text/plain",
+                        value = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
+                    }
                 }
             };
+
+            var json = JsonSerializer.Serialize(data); // Serialize data to JSON
+
             using var client = new DaprClientBuilder().Build();
-            await client.PublishEventAsync("my-sendgrid-binding", "create", data);
+            await client.PublishEventAsync("my-sendgrid-binding", "create", json); // Publish the serialized JSON
 
             return Ok(new { balance });
         }
