@@ -17,7 +17,7 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public async Task<ActionResult> Post(TransferRequest request)
+        public ActionResult Post(TransferRequest request)
         {
             if (!verifyToken(request.token).Result) {
                 return BadRequest("Invalid user");
@@ -54,6 +54,25 @@ namespace Transfer.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
+            sendEmail(request, transferAmount);
+
+
+            return Ok(new { balance });
+        }
+    
+        async private Task<bool> verifyToken(string token) {
+            
+            var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
+            //Check token
+            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } );
+
+
+
+            return response.IsSuccessStatusCode;
+        }
+
+        async private void sendEmail(TransferRequest request, decimal transferAmount) {
+            
             // send email notification
             var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
             var data = new
@@ -104,6 +123,5 @@ namespace Transfer.Controllers
         public string? ToAccount { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
-    }
     }
 }

@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Helpers;
+using Dapr.Client;
 using WebApi.Models;
 using WebApi.Services;
 
