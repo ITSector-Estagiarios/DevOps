@@ -96,14 +96,10 @@ namespace Transfer.Controllers
             
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
             //Check token
-            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } );
-
-
+            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } ); 
 
             return response.IsSuccessStatusCode;
         }
-
-    }
 
 
     public class Transfer
