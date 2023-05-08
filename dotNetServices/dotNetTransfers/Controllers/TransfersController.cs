@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Dapr.Client;
 using Transfer.Models;
+using System.Text.Json;
 
 namespace Transfer.Controllers
-
 {
     [ApiController]
     public class TransfersController : ControllerBase
@@ -20,7 +17,7 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public ActionResult Post(TransferRequest request)
+        public async Task<ActionResult> Post(TransferRequest request)
         {
             if (!verifyToken(request.token).Result) {
                 return BadRequest("Invalid user");
@@ -57,10 +54,44 @@ namespace Transfer.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
+            // send email notification
+            var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
+            var data = new
+            {
+                personalizations = new List<dynamic>
+                {
+                    new
+                    {
+                        to = new List<dynamic>
+                        {
+                            new { email = "user@email.com" }
+                        }
+                    }
+                },
+                from = new { email = "joao.felix@itsector.pt" },
+                subject = "Transfer request",
+                content = new List<dynamic>
+                {
+                    new
+                    {
+                        type = "text/plain",
+                        value = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
+                    }
+                }
+            };
+
             return Ok( new { balance });
         }
 
 
+            var json = JsonSerializer.Serialize(data); // Serialize data to JSON
+
+            using var client = new DaprClientBuilder().Build();
+            await client.PublishEventAsync("my-sendgrid-binding", "create", json); // Publish the serialized JSON
+
+            return Ok(new { balance });
+        }
+    
         async private Task<bool> verifyToken(string token) {
             
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
@@ -75,8 +106,6 @@ namespace Transfer.Controllers
     }
 
 
-    
-
     public class Transfer
     {
         public string? FromAccount { get; set; }
@@ -84,5 +113,4 @@ namespace Transfer.Controllers
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
-
 }
