@@ -34,6 +34,12 @@
     margin-top: -40px;
   }
 
+  label.code {
+    font-weight: bold;
+    font-size: 25px;
+    margin-top: -40px;
+  }
+
   input[type="text"] {
     padding: 20px;
     width: 150px;
@@ -43,6 +49,19 @@
   }
 
   button.transferir {
+    border-radius: 50px;
+    border: none;
+    width: 200px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #1877f2;
+    color: #fff;
+    cursor: pointer;
+    margin-top: -20px;
+    margin-bottom: 10px;
+  }
+
+  button.confirm-transfer {
     border-radius: 50px;
     border: none;
     width: 200px;
