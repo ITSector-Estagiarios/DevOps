@@ -47,7 +47,7 @@ function Transferencias() {
       }
   
       // Perform code verification here
-      const codeMatched = true; // Replace with your code verification logic
+      const codeMatched = true; 
   
       if (codeMatched) {
         const date = new Date().toISOString().slice(0, 10);
