@@ -38,13 +38,17 @@ public class UserDataController : ControllerBase
    [HttpPost("extract")]
     public IActionResult GetExtracts(AuthenticateExtractRequest model)
     {
-        string userId = verifyToken(model.token).Result;
-
-        if (userId == null)
+        string guid = verifyToken(model.token).Result;
+        if (guid == null)
         {
             return NotFound();
         }
-        var response = _userdataService.getExtracts(getUserId(userId).Result,model);
+        int userId = getUserId(guid).Result;
+        if (userId == 0)
+        {
+            return NotFound();
+        }
+        var response = _userdataService.getExtracts(userId,model);
         return Ok(response);
     }
 
