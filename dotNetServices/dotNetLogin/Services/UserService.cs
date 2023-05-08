@@ -3,6 +3,7 @@ namespace WebApi.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System;
 using System.Security.Claims;
 using System.Text;
 using Dapr.Client;
@@ -10,12 +11,13 @@ using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Models;
 
+
 public interface IUserService
 {
     AuthenticateResponse Authenticate(AuthenticateRequest model);
     IEnumerable<User> GetAll();
     User GetById(int id);
-    Task<bool> verifyToken(string email, string token);
+    ValidationResult verifyToken(string accessToken);
 }
 
 public class UserService : IUserService
@@ -41,14 +43,16 @@ public class UserService : IUserService
         // return null if user not found
         if (user == null) return null;
 
+        var userId = Guid.NewGuid().ToString();
+
+        if(!storeUser(userId, user).Result) return null;
+
         // authentication successful so generate jwt token
-        string token = generateJwtToken(user);
-        if (!storeToken(model.email, token).Result) return null;
+        string token = generateJwtToken(userId);
+        
+        var response = new AuthenticateResponse(token);
 
-        Console.WriteLine(verifyToken(model.email, token).Result);
-
-
-        return new AuthenticateResponse(user, token);
+        return response;
     }
 
     public IEnumerable<User> GetAll()
@@ -62,35 +66,50 @@ public class UserService : IUserService
     }
 
     // helper methods
-    private string generateJwtToken(User user)
+    private string generateJwtToken(string userId)
     {
         // generate token that is valid for 7 days
         var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-            Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, userId) }),
+            Expires = DateTime.UtcNow.AddHours(8),
+            SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
         };
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }
 
-    async public Task<bool> verifyToken(string email, string token) {
+    public ValidationResult verifyToken(string accessToken) {
+        try {
+            var handler = new JwtSecurityTokenHandler();
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
 
-        var client = new DaprClientBuilder().Build();
+            var validationParameters = new TokenValidationParameters{
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
 
-        var state = await client.GetStateAsync<dynamic>("statestore", email);
+            ClaimsPrincipal principal = handler.ValidateToken(
+                accessToken, validationParameters, out SecurityToken securityToken);
 
-        return state.ToString() == token;
+
+            return new ValidationResult { IsValid = true, userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value };
+        }
+        catch (Exception ex) {
+            return new ValidationResult { IsValid = false, Error = ex.Message };
+        }
     }
 
-    async private Task<bool> storeToken(string email, string token) {
+    async private Task<bool> storeUser(string Guid, User user) {
         var client = new DaprClientBuilder().Build();
 
         try {
-            await client.SaveStateAsync("statestore", email, token);
+            await client.SaveStateAsync("statestore", Guid, user);
 
             return true;
         }

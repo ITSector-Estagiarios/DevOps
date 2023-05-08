@@ -23,14 +23,16 @@ public class UsersController : ControllerBase
 
         if (response == null)
             return BadRequest(new { message = "Email or password is incorrect" });
-
+        
         return Ok(response);
     }
     [HttpPost("verify")]
     public IActionResult verifyToken(verifyTokenRequest model)
     {
-        if (_userService.verifyToken(model.email, model.token).Result) {
-            return Ok();
+
+        var result = _userService.verifyToken(model.Token);
+        if (result.IsValid) {
+            return Ok(result);
         }
         else {
             return BadRequest();
