@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Dapr.Client;
-using Transfer.Models;
 using System.Text.Json;
+using Transfer.Models;
 
 namespace Transfer.Controllers
 {
@@ -80,10 +80,6 @@ namespace Transfer.Controllers
                 }
             };
 
-            return Ok( new { balance });
-        }
-
-
             var json = JsonSerializer.Serialize(data); // Serialize data to JSON
 
             using var client = new DaprClientBuilder().Build();
@@ -108,5 +104,6 @@ namespace Transfer.Controllers
         public string? ToAccount { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
+    }
     }
 }
