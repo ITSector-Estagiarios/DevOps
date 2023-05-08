@@ -103,20 +103,9 @@ namespace Transfer.Controllers
 
             using var client = new DaprClientBuilder().Build();
             await client.PublishEventAsync("my-sendgrid-binding", "create", json); // Publish the serialized JSON
-
-            return Ok(new { balance });
-        }
-    
-        async private Task<bool> verifyToken(string token) {
-            
-            var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
-            //Check token
-            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } ); 
-
-            return response.IsSuccessStatusCode;
         }
 
-
+    }
     public class Transfer
     {
         public string? FromAccount { get; set; }
