@@ -17,7 +17,7 @@ public interface IUserService
     AuthenticateResponse Authenticate(AuthenticateRequest model);
     IEnumerable<User> GetAll();
     User GetById(int id);
-    Task<ValidationResult> verifyToken(string accessToken);
+    ValidationResult verifyToken(string accessToken);
 }
 
 public class UserService : IUserService
@@ -81,7 +81,7 @@ public class UserService : IUserService
         return tokenHandler.WriteToken(token);
     }
 
-    async public Task<ValidationResult> verifyToken(string accessToken) {
+    public ValidationResult verifyToken(string accessToken) {
         try {
             var handler = new JwtSecurityTokenHandler();
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));

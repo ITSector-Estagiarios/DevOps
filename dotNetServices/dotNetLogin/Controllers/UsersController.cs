@@ -29,7 +29,8 @@ public class UsersController : ControllerBase
     [HttpPost("verify")]
     public IActionResult verifyToken(verifyTokenRequest model)
     {
-        var result = _userService.verifyToken(model.Token).Result;
+
+        var result = _userService.verifyToken(model.Token);
         if (result.IsValid) {
             return Ok(result);
         }
