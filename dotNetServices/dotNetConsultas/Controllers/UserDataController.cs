@@ -26,12 +26,12 @@ public class UserDataController : ControllerBase
         {
             return NotFound();
         }
-        int userId = getUserId(guid).Result;
-        if (userId == 0)
+        User user = getUser(guid).Result;
+        if (user == null)
         {
             return NotFound();
         }
-        var response = _userdataService.getIban(userId);
+        var response = _userdataService.getIban(user.Id);
         return Ok(response);
     }
     
@@ -43,12 +43,12 @@ public class UserDataController : ControllerBase
         {
             return NotFound();
         }
-        int userId = getUserId(guid).Result;
-        if (userId == 0)
+        User user = getUser(guid).Result;
+        if (user == null)
         {
             return NotFound();
         }
-        var response = _userdataService.getExtracts(userId,model);
+        var response = _userdataService.getExtracts(user.Id,model);
         return Ok(response);
     }
 
@@ -65,12 +65,12 @@ public class UserDataController : ControllerBase
         return userId;
     }
 
-    async private Task<int> getUserId(string guid) {
+    async private Task<User> getUser(string guid) {
         var client = new DaprClientBuilder().Build();
         string jsonString = await client.GetStateAsync<string>("statestore", guid);
-        if (jsonString == null) return 0;
-
-        return 1;
+        if (jsonString == null) return null;
+        User user = JsonSerializer.Deserialize<User>(jsonString);
+        return user;
     }
 
     private class TokenResponse {

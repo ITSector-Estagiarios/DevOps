@@ -19,8 +19,15 @@ namespace Transfer.Controllers
         [HttpPost("transfer")]
         public ActionResult Post(TransferRequest request)
         {
-            if (request.token != null && !verifyToken(request.token).Result) {
+            
+            string guid;
+            if (request.token == null) {
                 return BadRequest("Invalid user");
+            } else {
+                guid = verifyToken(request.token).Result;
+                if (guid == null) {
+                    return BadRequest("Invalid user");
+                }
             }
             if (request.ToAccount == fromAccount)
             {
@@ -53,25 +60,38 @@ namespace Transfer.Controllers
 
             transfers.Add(newTransfer);
             balance -= transferAmount;
-
-            sendEmail(request, transferAmount);
+            User user = getUser(guid).Result;
+            if (user == null) {
+                return BadRequest("Invalid user");
+            }
+            sendEmail(request, transferAmount,user.email);
 
 
             return Ok(new { balance });
         }
     
-        async private Task<bool> verifyToken(string token) {
-            
+        async private Task<string> verifyToken(string token) {
+            string userId = null;
+
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
             //Check token
             var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } );
+            userId = await response.Content.ReadAsStringAsync();
+            TokenResponse tokenresponse = JsonSerializer.Deserialize<TokenResponse>(userId);
+            if (tokenresponse.IsValid) userId = tokenresponse.userId;
 
-
-
-            return response.IsSuccessStatusCode;
+            return userId;
         }
 
-        async private void sendEmail(TransferRequest request, decimal transferAmount) {
+        async private Task<User> getUser(string guid) {
+            var client = new DaprClientBuilder().Build();
+            string jsonString = await client.GetStateAsync<string>("statestore", guid);
+            if (jsonString == null) return null;
+            User user = JsonSerializer.Deserialize<User>(jsonString);
+            return user;
+        }
+
+        async private void sendEmail(TransferRequest request, decimal transferAmount,string user_email) {
             
             // send email notification
             var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
@@ -83,7 +103,7 @@ namespace Transfer.Controllers
                     {
                         to = new List<dynamic>
                         {
-                            new { email = "user@email.com" }
+                            new { email = user_email }
                         }
                     }
                 },
@@ -112,5 +132,19 @@ namespace Transfer.Controllers
         public string? ToAccount { get; set; }
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
+    }
+
+    public class User {
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string email { get; set; }
+        public string password { get; set; }
+    }
+
+    public class TokenResponse {
+        public bool IsValid { get; set; }
+        public string Error { get; set; }
+        public string userId { get; set; }
     }
 }
