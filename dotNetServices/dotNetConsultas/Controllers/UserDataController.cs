@@ -79,7 +79,7 @@ public class UserDataController : ControllerBase
         public string userId { get; set; }
     }
 
-    private class User {
+    new private class User {
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

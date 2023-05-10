@@ -19,7 +19,7 @@ namespace Transfer.Controllers
         [HttpPost("transfer")]
         public ActionResult Post(TransferRequest request)
         {
-            if (!verifyToken(request.token).Result) {
+            if (request.token != null && !verifyToken(request.token).Result) {
                 return BadRequest("Invalid user");
             }
             if (request.ToAccount == fromAccount)
