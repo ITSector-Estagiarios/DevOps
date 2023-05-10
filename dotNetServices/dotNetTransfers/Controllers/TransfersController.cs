@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Dapr.Client;
+using System;
+using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Transfer.Models;
 
 namespace Transfer.Controllers
@@ -17,30 +21,25 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public ActionResult Post(TransferRequest request)
+        public async Task<ActionResult> Post(TransferRequest request)
         {
-            
-            string guid;
-            if (request.token == null) {
+            string guid = await VerifyToken(request.token);
+            if (guid == null)
+            {
                 return BadRequest("Invalid user");
-            } else {
-                guid = verifyToken(request.token).Result;
-                if (guid == null) {
-                    return BadRequest("Invalid user");
-                }
             }
+
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
             }
 
-            if (string.IsNullOrEmpty(request.ToAccount) || request.Amount == null)
+            if (string.IsNullOrEmpty(request.ToAccount) || string.IsNullOrEmpty(request.Amount))
             {
                 return BadRequest("Please fill in all fields");
             }
 
-            decimal transferAmount;
-            if (!decimal.TryParse(request.Amount, out transferAmount) || transferAmount <= 0)
+            if (!decimal.TryParse(request.Amount, out decimal transferAmount) || transferAmount <= 0)
             {
                 return BadRequest("Please enter a valid transfer amount");
             }
@@ -60,72 +59,73 @@ namespace Transfer.Controllers
 
             transfers.Add(newTransfer);
             balance -= transferAmount;
-            User user = getUser(guid).Result;
-            if (user == null) {
+
+            User user = await GetUser(guid);
+            if (user == null)
+            {
                 return BadRequest("Invalid user");
             }
-            sendEmail(request, transferAmount,user.email);
 
+            await SendEmail(request, transferAmount, user.email);
 
             return Ok(new { balance });
         }
-    
-        async private Task<string> verifyToken(string token) {
+
+        private async Task<string> VerifyToken(string token)
+        {
             string userId = null;
 
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
-            //Check token
-            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } );
+            // Check token
+            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
             userId = await response.Content.ReadAsStringAsync();
             TokenResponse tokenresponse = JsonSerializer.Deserialize<TokenResponse>(userId);
-            if (tokenresponse.IsValid) userId = tokenresponse.userId;
+            if (tokenresponse.IsValid)
+            {
+                userId = tokenresponse.userId;
+            }
 
             return userId;
         }
 
-        async private Task<User> getUser(string guid) {
+        private async Task<User> GetUser(string guid)
+        {
             var client = new DaprClientBuilder().Build();
-            string jsonString = await client.GetStateAsync<string>("statestore", guid);
-            if (jsonString == null) return null;
+            (string jsonString, _) = await client.GetStateAndETagAsync<string>("statestore", guid);
+            if (jsonString == null)
+            {
+                return null;
+            }
+
             User user = JsonSerializer.Deserialize<User>(jsonString);
             return user;
         }
 
-        async private void sendEmail(TransferRequest request, decimal transferAmount,string user_email) {
-            
-            // send email notification
-            var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
-            var data = new
+        private async Task SendEmail(TransferRequest request, decimal transferAmount, string user_email)
+        {
+            SmtpClient smtpClient = new SmtpClient("your-smtp-server");
+            MailMessage mailMessage = new MailMessage
             {
-                personalizations = new List<dynamic>
-                {
-                    new
-                    {
-                        to = new List<dynamic>
-                        {
-                            new { email = user_email }
-                        }
-                    }
-                },
-                from = new { email = "joao.felix@itsector.pt" },
-                subject = "Transfer request",
-                content = new List<dynamic>
-                {
-                    new
-                    {
-                        type = "text/plain",
-                        value = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
-                    }
-                }
+                From = new MailAddress("sender@example.com"),
+                Subject = "Transfer request",
+                Body = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
             };
-
-            var json = JsonSerializer.Serialize(data); // Serialize data to JSON
-
-            using var client = new DaprClientBuilder().Build();
-            await client.PublishEventAsync("my-sendgrid-binding", "create", json); // Publish the serialized JSON
+            mailMessage.To.Add(new MailAddress(user_email));
+            
+            // Send email asynchronously
+            try
+            {
+                await smtpClient.SendMailAsync(mailMessage);
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions occurred during sending the email
+                Console.WriteLine($"Error sending email: {ex.Message}");
+                // throw an exception or return an appropriate error response
+                throw;
+            }
         }
 
-    }
     public class Transfer
     {
         public string? FromAccount { get; set; }
@@ -147,4 +147,4 @@ namespace Transfer.Controllers
         public string Error { get; set; }
         public string userId { get; set; }
     }
-}
+}}
