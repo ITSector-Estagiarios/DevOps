@@ -12,8 +12,8 @@ function MonthlyStatements() {
   const fetchTransactions = async () => {
     // Fazer chamada a uma API ou servidor para obter as transações
     const user = localStorage.getItem('user');
-    const Id = (JSON.parse(user).Id).toString();
-    const data = { Id , month , year};
+    const token = JSON.parse(user).Token;
+    const data = { Token: token , month , year};
     await fetch('http://localhost:4001/extract', {
       method: 'POST',
       headers: {

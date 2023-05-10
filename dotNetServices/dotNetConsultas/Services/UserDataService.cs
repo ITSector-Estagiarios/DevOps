@@ -9,9 +9,9 @@ using Consultas.Models;
 
 public interface IUserDataService
 {
-    AuthenticateIbanResponse getIban(AuthenticateIbanRequest model);
+    AuthenticateIbanResponse getIban(int userId);
 
-    AuthenticateExtractResponse getExtracts(AuthenticateExtractRequest model);
+    AuthenticateExtractResponse getExtracts(int userId, AuthenticateExtractRequest model);
 }
 
 public class UserDataService : IUserDataService
@@ -32,9 +32,9 @@ public class UserDataService : IUserDataService
     };
 
 
-    public AuthenticateIbanResponse getIban(AuthenticateIbanRequest model)
+    public AuthenticateIbanResponse getIban(int userId)
     {
-        var user = _users.SingleOrDefault(x => x.Id == (long)Convert.ToInt64(model.Id));
+        var user = _users.SingleOrDefault(x => x.Id == (long)userId);
 
         // return null if user not found
         if (user == null) return null;
@@ -42,8 +42,8 @@ public class UserDataService : IUserDataService
         return new AuthenticateIbanResponse(user);
     }
 
-    public AuthenticateExtractResponse getExtracts(AuthenticateExtractRequest model) {
-        var extracts = _extracts.Where( x => x.user_Id == (long)Convert.ToInt64(model.Id) && x.month == model.month && x.year == model.year).ToList();
+    public AuthenticateExtractResponse getExtracts(int userId, AuthenticateExtractRequest model) {
+        var extracts = _extracts.Where( x => x.user_Id == (long)userId && x.month == model.month && x.year == model.year).ToList();
 
         return new AuthenticateExtractResponse(extracts);
     }

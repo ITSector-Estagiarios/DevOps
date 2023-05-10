@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 public class AuthenticateExtractRequest
 {
     [Required]
-    public string Id { get; set; }
+    public string token { get; set; }
     [Required]
     public string month { get; set; }
     [Required]
