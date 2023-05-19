@@ -60,6 +60,21 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/publish'
       displayName: Artifact Release
     
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: save/dotNetConsultas
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
+        includeRootFolder: true
+      displayName: Zip Release Files
+    
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
+        targetPath: '$(System.DefaultWorkingDirectory)/publish'
+        ArtifactName: 'dropConsultas'
+      displayName: Artifact Release
+    
     
 - stage: Deployment
   pool:
