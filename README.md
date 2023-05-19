@@ -11,6 +11,12 @@ Para parar o site
 
 * ./stop.bat
 
+Para correr MailDev (development smtp)
+
+
+* docker pull maildev/maildev
+* docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+
 
 ## Domains e subdomains
 
