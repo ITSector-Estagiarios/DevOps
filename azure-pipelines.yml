@@ -22,7 +22,7 @@ variables:
 stages:
 - stage: Development
   pool:
-    vmImage: windows-latest
+    vmImage: ubuntu-latest
   jobs:
   - job: Development
     steps:
