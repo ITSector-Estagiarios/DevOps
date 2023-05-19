@@ -21,11 +21,13 @@ namespace Transfer.Controllers
         private static decimal balance = 100000;
 
         [HttpPost("transfer")]
-        public async Task<ActionResult> Post(TransferRequest request)
+        public ActionResult Post(TransferRequest request)
         {
-            string guid = await VerifyToken(request.token);
+            string guid = VerifyToken(request.token).Result;
+            Console.WriteLine("guid: " + guid == null);
             if (guid == null)
             {
+                Console.WriteLine("TESTE1");
                 return BadRequest("Invalid user");
             }
 
@@ -60,15 +62,17 @@ namespace Transfer.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
-            User user = await GetUser(guid);
+            User user = getUser(guid).Result;
+            Console.WriteLine("user: " + user);
             if (user == null)
             {
+                Console.WriteLine("TESTE2");
                 return BadRequest("Invalid user");
             }
 
-            await SendEmail(request, transferAmount, user.email);
+            SendEmail(request, transferAmount, user.email);
 
-            return Ok(new { balance });
+            return Ok( new { balance });
         }
 
         private async Task<string> VerifyToken(string token)
@@ -88,21 +92,30 @@ namespace Transfer.Controllers
             return userId;
         }
 
-        private async Task<User> GetUser(string guid)
-        {
+        async private Task<User> getUser(string guid) {
             var client = new DaprClientBuilder().Build();
-            (string jsonString, _) = await client.GetStateAndETagAsync<string>("statestore", guid);
-            if (jsonString == null)
-            {
-                return null;
-            }
-
+            Console.WriteLine("guid: " + guid);
+            string jsonString = await client.GetStateAsync<string>("statestore", guid);
+            Console.WriteLine("jsonString: " + jsonString);
+            if (jsonString == null) return null;
             User user = JsonSerializer.Deserialize<User>(jsonString);
             return user;
         }
 
-        private async Task SendEmail(TransferRequest request, decimal transferAmount, string user_email)
+        private async void SendEmail(TransferRequest request, decimal transferAmount, string user_email)
         {
+            var daprClient = new DaprClientBuilder().Build();
+            var metadata = new Dictionary<string, string>
+            {
+                ["emailTo"] = "test@subject.com",
+                ["subject"] = "Test email"
+            };
+
+
+            await daprClient.InvokeBindingAsync("sendemail", "create", "hello" ,metadata);
+            
+            Console.WriteLine("Email sent successfully.");
+            /*
             SmtpClient smtpClient = new SmtpClient("your-smtp-server");
             MailMessage mailMessage = new MailMessage
             {
@@ -124,8 +137,8 @@ namespace Transfer.Controllers
                 // throw an exception or return an appropriate error response
                 throw;
             }
+            */
         }
-
     public class Transfer
     {
         public string? FromAccount { get; set; }
@@ -133,6 +146,8 @@ namespace Transfer.Controllers
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
+
+}}
 
     public class User {
         public int Id { get; set; }
@@ -147,4 +162,3 @@ namespace Transfer.Controllers
         public string Error { get; set; }
         public string userId { get; set; }
     }
-}}
