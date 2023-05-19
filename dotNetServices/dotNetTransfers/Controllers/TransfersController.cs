@@ -24,10 +24,8 @@ namespace Transfer.Controllers
         public ActionResult Post(TransferRequest request)
         {
             string guid = VerifyToken(request.token).Result;
-            Console.WriteLine("guid: " + guid == null);
             if (guid == null)
             {
-                Console.WriteLine("TESTE1");
                 return BadRequest("Invalid user");
             }
 
@@ -63,10 +61,8 @@ namespace Transfer.Controllers
             balance -= transferAmount;
 
             User user = getUser(guid).Result;
-            Console.WriteLine("user: " + user);
             if (user == null)
             {
-                Console.WriteLine("TESTE2");
                 return BadRequest("Invalid user");
             }
 
@@ -94,9 +90,7 @@ namespace Transfer.Controllers
 
         async private Task<User> getUser(string guid) {
             var client = new DaprClientBuilder().Build();
-            Console.WriteLine("guid: " + guid);
             string jsonString = await client.GetStateAsync<string>("statestore", guid);
-            Console.WriteLine("jsonString: " + jsonString);
             if (jsonString == null) return null;
             User user = JsonSerializer.Deserialize<User>(jsonString);
             return user;
@@ -115,29 +109,7 @@ namespace Transfer.Controllers
             await daprClient.InvokeBindingAsync("sendemail", "create", "hello" ,metadata);
             
             Console.WriteLine("Email sent successfully.");
-            /*
-            SmtpClient smtpClient = new SmtpClient("your-smtp-server");
-            MailMessage mailMessage = new MailMessage
-            {
-                From = new MailAddress("sender@example.com"),
-                Subject = "Transfer request",
-                Body = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
-            };
-            mailMessage.To.Add(new MailAddress(user_email));
             
-            // Send email asynchronously
-            try
-            {
-                await smtpClient.SendMailAsync(mailMessage);
-            }
-            catch (Exception ex)
-            {
-                // Handle any exceptions occurred during sending the email
-                Console.WriteLine($"Error sending email: {ex.Message}");
-                // throw an exception or return an appropriate error response
-                throw;
-            }
-            */
         }
     public class Transfer
     {
