@@ -28,29 +28,6 @@ stages:
     steps:
     - script: echo Hi > helloworld.txt
       displayName: 'BS'
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'connection'
-        scriptType: 'ps'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az storage blob generate-sas --account-name itsectorfeupexample --container-name vhds --name blob --permissions acdrw --expiry 2023-05-08 --auth-mode login --as-user > sas.txt'
-        powerShellErrorActionPreference: 'continue'
-    - script: echo %cd% && type sas.txt
-      displayName: Debug
-    - task: PowerShell@2
-      inputs:
-        filePath: 'variable.ps1'
-        arguments: -Pat '$pat'
-    - task: AzureFileCopy@3
-      inputs:
-        SourcePath: 'helloworld.txt'
-        azureSubscription: 'connection'
-        Destination: 'AzureBlob'
-        storage: 'itsectorfeupexample'
-        ContainerName: 'vhds'
-        CleanTargetBeforeCopy: true
-        outputStorageContainerSasToken: 'se=2023-05-08&sp=racwd&sv=2021-06-08&sr=b&skoid=30e7551b-48a9-4842-871f-58030a36e838&sktid=f06ed7e8-2a33-433c-8e90-69f6fba89365&skt=2023-05-05T15%3A10%3A51Z&ske=2023-05-08T00%3A00%3A00Z&sks=b&skv=2021-06-08&sig=4rDob3UvwSAu0ioF9Z8eC0bBrCIQ%2BbRxMiFTdujZTy8%3D'
-
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
