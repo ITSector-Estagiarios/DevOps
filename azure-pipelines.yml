@@ -66,17 +66,17 @@ stages:
       vmImage: windows-latest
   jobs:
   - job: Deployment
-  steps:
-  - task: AzureFileCopy@5
-    inputs:
-      SourcePath: '$(System.DefaultWorkingDirectory)/publish'
-      azureSubscription: 'connection'
-      Destination: 'AzureVMs'
-      storage: 'itsectorfeupexample'
-      resourceGroup: 'EXAMPLE-RESOURCES'
-      vmsAdminUserName: 'adminuser'
-      vmsAdminPassword: 'P@$$w0rd1234!'
-      TargetPath: '/'
+    steps:
+    - task: AzureFileCopy@5
+      inputs:
+        SourcePath: '$(System.DefaultWorkingDirectory)/publish'
+        azureSubscription: 'connection'
+        Destination: 'AzureVMs'
+        storage: 'itsectorfeupexample'
+        resourceGroup: 'EXAMPLE-RESOURCES'
+        vmsAdminUserName: 'adminuser'
+        vmsAdminPassword: 'P@$$w0rd1234!'
+        TargetPath: '/'
     
 
 - stage: QA
