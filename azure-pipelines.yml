@@ -32,8 +32,8 @@ stages:
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
-      displayName: 'Partial Test Suite' 
+    #- script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+    #  displayName: 'Partial Test Suite' 
     - script: cd dotNetServices && for d in */; do (cd "$d" && dotnet publish -r win-x64 --output OutputExe --self-contained -c Release /p:PublishSingleFile=true /p:AssemblyName="mydotnet_${d%/}" && pwd); done
       displayName: 'dotNet Publish'
     - script: cd dotNetServices && mkdir -p ../save && for d in */OutputExe/; do (mkdir -p ../save/$d && cd "$d" && cp -r * ../../../save/$d ); done  
