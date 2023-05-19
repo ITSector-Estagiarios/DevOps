@@ -17,7 +17,7 @@ variables:
    projectFolder: 'website'
    buildFolder: 'website/build'
    qualityGateThreshold: $(Thresholds.codeCoverage)
-   pat: $(PAT.marcopat)
+   pat: $PAT.marcopat
 
 stages:
 - stage: Development
