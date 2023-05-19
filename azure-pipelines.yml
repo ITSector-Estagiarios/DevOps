@@ -60,47 +60,63 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/publish'
       displayName: Artifact Release
     
-    
-- stage: Deployment
-  pool:
-      vmImage: windows-latest
-  jobs:
-  - job: Deployment
-    steps:
-    - task: AzureFileCopy@5
+    - task: ArchiveFiles@2
       inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)/publish'
-        azureSubscription: 'connection'
-        Destination: 'AzureVMs'
-        storage: 'itsectorfeupexample'
-        resourceGroup: 'EXAMPLE-RESOURCES'
-        vmsAdminUserName: 'adminuser'
-        vmsAdminPassword: 'P@$$w0rd1234!'
-        TargetPath: '/'
+        rootFolderOrFile: save/dotNetConsultas
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
+        includeRootFolder: true
+      displayName: Zip Release Files
     
-
-- stage: QA
-  dependsOn: Development
-  condition: succeeded('Development')
-  jobs:
-  - job: QATesting
-    steps:
-    - script: cd $(projectFolder) && npm install
-      displayName: 'Install dependencies'
-    - script: cd $(projectFolder) && npm run build
-      displayName: 'Build'
-    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
-      displayName: 'Full Test Suite'
-    - script: cd $(projectFolder) && npm run mutation
-      displayName: Mutation Testing
-    condition: ${{parameters.runQATests}}
-  - job: Approval
-    displayName: "Manual Approval"
-    pool: server
-    steps:
-      - task: ManualValidation@0
-        timeoutInMinutes: 60
-        inputs:
-          notifyUsers: 'E6022@itsector.pt'
-          instructions: 'Release'
-          onTimeout: reject
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
+        targetPath: '$(System.DefaultWorkingDirectory)/publish'
+        ArtifactName: 'dropConsultas'
+      displayName: Artifact Release
+    
+    
+#- stage: Deployment
+#  pool:
+#      vmImage: windows-latest
+#  jobs:
+#  - job: Deployment
+#    steps:
+#    - task: AzureFileCopy@5
+#      inputs:
+#        SourcePath: '$(System.DefaultWorkingDirectory)/publish'
+#        azureSubscription: 'connection'
+#        Destination: 'AzureVMs'
+#        storage: 'itsectorfeupexample'
+#        resourceGroup: 'EXAMPLE-RESOURCES'
+#        vmsAdminUserName: 'adminuser'
+#        vmsAdminPassword: 'P@$$w0rd1234!'
+#        TargetPath: '/'
+#    
+#
+#- stage: QA
+#  dependsOn: Development
+#  condition: succeeded('Development')
+#  jobs:
+#  - job: QATesting
+#    steps:
+#    - script: cd $(projectFolder) && npm install
+#      displayName: 'Install dependencies'
+#    - script: cd $(projectFolder) && npm run build
+#      displayName: 'Build'
+#    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+#      displayName: 'Full Test Suite'
+#    - script: cd $(projectFolder) && npm run mutation
+#      displayName: Mutation Testing
+#    condition: ${{parameters.runQATests}}
+#  - job: Approval
+#    displayName: "Manual Approval"
+#    pool: server
+#    steps:
+#      - task: ManualValidation@0
+#        timeoutInMinutes: 60
+#        inputs:
+#          notifyUsers: 'E6022@itsector.pt'
+#          instructions: 'Release'
+#          onTimeout: reject
+#
