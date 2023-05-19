@@ -68,15 +68,12 @@ stages:
         resourceGroup: 'EXAMPLE-RESOURCES'
         vmsAdminUserName: 'adminuser'
         vmsAdminPassword: 'P@$$w0rd1234!'
-        TargetPath: '/''
+        TargetPath: '/'
     
 
 - stage: QA
   dependsOn: Development
   condition: succeeded('Development')
-  pool:
-      vmImage: ubuntu-latest
-      environment: Experimental environment
   jobs:
   - job: QATesting
     steps:
