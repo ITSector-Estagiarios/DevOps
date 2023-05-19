@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Dapr.Client;
+using System;
+using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Transfer.Models;
 
 namespace Transfer.Controllers
@@ -19,28 +23,23 @@ namespace Transfer.Controllers
         [HttpPost("transfer")]
         public ActionResult Post(TransferRequest request)
         {
-            
-            string guid;
-            if (request.token == null) {
+            string guid = VerifyToken(request.token).Result;
+            if (guid == null)
+            {
                 return BadRequest("Invalid user");
-            } else {
-                guid = verifyToken(request.token).Result;
-                if (guid == null) {
-                    return BadRequest("Invalid user");
-                }
             }
+
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
             }
 
-            if (string.IsNullOrEmpty(request.ToAccount) || request.Amount == null)
+            if (string.IsNullOrEmpty(request.ToAccount) || string.IsNullOrEmpty(request.Amount))
             {
                 return BadRequest("Please fill in all fields");
             }
 
-            decimal transferAmount;
-            if (!decimal.TryParse(request.Amount, out transferAmount) || transferAmount <= 0)
+            if (!decimal.TryParse(request.Amount, out decimal transferAmount) || transferAmount <= 0)
             {
                 return BadRequest("Please enter a valid transfer amount");
             }
@@ -60,25 +59,31 @@ namespace Transfer.Controllers
 
             transfers.Add(newTransfer);
             balance -= transferAmount;
+
             User user = getUser(guid).Result;
-            if (user == null) {
+            if (user == null)
+            {
                 return BadRequest("Invalid user");
             }
-            sendEmail(request, transferAmount,user.email);
 
+            SendEmail(request, transferAmount, user.email);
 
-            return Ok(new { balance });
+            return Ok( new { balance });
         }
-    
-        async private Task<string> verifyToken(string token) {
+
+        private async Task<string> VerifyToken(string token)
+        {
             string userId = null;
 
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
-            //Check token
-            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token } );
+            // Check token
+            var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
             userId = await response.Content.ReadAsStringAsync();
             TokenResponse tokenresponse = JsonSerializer.Deserialize<TokenResponse>(userId);
-            if (tokenresponse.IsValid) userId = tokenresponse.userId;
+            if (tokenresponse.IsValid)
+            {
+                userId = tokenresponse.userId;
+            }
 
             return userId;
         }
@@ -91,41 +96,21 @@ namespace Transfer.Controllers
             return user;
         }
 
-        async private void sendEmail(TransferRequest request, decimal transferAmount,string user_email) {
-            
-            // send email notification
-            var emailContent = $"Transfer of {transferAmount.ToString("C")} made from account {fromAccount} to account {request.ToAccount}.";
-            var data = new
+        private async void SendEmail(TransferRequest request, decimal transferAmount, string user_email)
+        {
+            var daprClient = new DaprClientBuilder().Build();
+            var metadata = new Dictionary<string, string>
             {
-                personalizations = new List<dynamic>
-                {
-                    new
-                    {
-                        to = new List<dynamic>
-                        {
-                            new { email = user_email }
-                        }
-                    }
-                },
-                from = new { email = "joao.felix@itsector.pt" },
-                subject = "Transfer request",
-                content = new List<dynamic>
-                {
-                    new
-                    {
-                        type = "text/plain",
-                        value = $"Transfer request: {transferAmount:C} from account {fromAccount} to account {request.ToAccount}"
-                    }
-                }
+                ["emailTo"] = "test@subject.com",
+                ["subject"] = "Test email"
             };
 
-            var json = JsonSerializer.Serialize(data); // Serialize data to JSON
 
-            using var client = new DaprClientBuilder().Build();
-            await client.PublishEventAsync("my-sendgrid-binding", "create", json); // Publish the serialized JSON
+            await daprClient.InvokeBindingAsync("sendemail", "create", "hello" ,metadata);
+            
+            Console.WriteLine("Email sent successfully.");
+            
         }
-
-    }
     public class Transfer
     {
         public string? FromAccount { get; set; }
@@ -133,6 +118,8 @@ namespace Transfer.Controllers
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
+
+}}
 
     public class User {
         public int Id { get; set; }
@@ -147,4 +134,3 @@ namespace Transfer.Controllers
         public string Error { get; set; }
         public string userId { get; set; }
     }
-}

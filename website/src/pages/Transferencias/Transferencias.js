@@ -70,14 +70,18 @@ function Transferencias() {
           },
           body: JSON.stringify(newTransfer)
         })
-          .then((response) => response.json())
+          .then((response) => {
+            if (response.ok) response.json();
+            else throw new Error(response.statusText);
+            
+          })
           .then((data) => {
             setTransfers([...transfers, data]);
             setBalance(data.balance);
             setShowSuccessMessage(true);
             resetForm();
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log(error.message));
       } else {
         alert("The entered code does not match");
       }

@@ -61,7 +61,7 @@ public class UserDataController : ControllerBase
         userId = await response.Content.ReadAsStringAsync();
         TokenResponse tokenresponse = JsonSerializer.Deserialize<TokenResponse>(userId);
         if (tokenresponse.IsValid) userId = tokenresponse.userId;
-
+        Console.WriteLine("userId: " + userId);
         return userId;
     }
 
