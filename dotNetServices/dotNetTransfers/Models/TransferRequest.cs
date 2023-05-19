@@ -1,24 +1,24 @@
-namespace Transfer.Models;
+namespace Transfers.Models;
 
 using System.ComponentModel.DataAnnotations;
 
 public class TransferRequest
 {
     [Required]
-    public string Amount { get; set; }
+    public string? Amount { get; set; }
 
     [Required]
-    public string fromAccount { get; set; }
+    public string? fromAccount { get; set; }
 
     [Required]
-    public string ToAccount { get; set; }
+    public string? ToAccount { get; set; }
 
     [Required]
-    public string date { get; set; }
+    public string? date { get; set; }
 
     [Required]
-    public string token { get; set; }
+    public string? token { get; set; }
 
     [Required]
-    public string code { get; set; }
+    public string? code { get; set; }
 }
