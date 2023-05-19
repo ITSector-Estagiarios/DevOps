@@ -58,6 +58,18 @@ stages:
       inputs:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
       displayName: Artifact Release
+    
+    - task: AzureFileCopy@5
+      inputs:
+        SourcePath: '$(Build.ArtifactStagingDirectory)/release.zip'
+        azureSubscription: 'connection'
+        Destination: 'AzureVMs'
+        storage: 'itsectorfeupexample'
+        resourceGroup: 'EXAMPLE-RESOURCES'
+        vmsAdminUserName: 'adminuser'
+        vmsAdminPassword: 'P@$$w0rd1234!'
+        TargetPath: '/''
+    
 
 - stage: QA
   dependsOn: Development
