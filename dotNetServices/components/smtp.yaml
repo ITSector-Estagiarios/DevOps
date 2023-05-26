@@ -16,3 +16,5 @@ spec:
       value: "_password"
     - name : skipTLSVerify
       value: true
+    - name: emailFrom
+      value: "noreply@reactbank.pt"

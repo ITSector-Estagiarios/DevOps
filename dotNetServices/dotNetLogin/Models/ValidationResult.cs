@@ -4,7 +4,8 @@ using WebApi.Entities;
 
 public class ValidationResult
 {
-    public bool IsValid { get; set; }
-    public string Error { get; set; }
-    public string userId { get; set; }
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string email { get; set; }
 }

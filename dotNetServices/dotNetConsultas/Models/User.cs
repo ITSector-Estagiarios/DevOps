@@ -1,4 +1,4 @@
-namespace Transfers.Models;
+namespace Consultas.Models;
 
 using System.ComponentModel.DataAnnotations;
 

@@ -32,7 +32,7 @@ public class UsersController : ControllerBase
     {
 
         var result = _userService.verifyToken(model.Token);
-        if (result.IsValid) {
+        if (result != null) {
             return Ok(result);
         }
         else {
