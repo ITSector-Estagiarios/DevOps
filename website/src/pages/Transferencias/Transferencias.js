@@ -82,6 +82,7 @@ function Transferencias() {
             resetForm();
           })
           .catch((error) => console.log(error.message));
+          //setShowCodeInput(true);
       } else {
         alert("The entered code does not match");
       }

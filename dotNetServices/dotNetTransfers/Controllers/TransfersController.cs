@@ -31,7 +31,7 @@ namespace Transfers.Controllers
             {
                 return BadRequest("Invalid user");
             }
-
+            
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
