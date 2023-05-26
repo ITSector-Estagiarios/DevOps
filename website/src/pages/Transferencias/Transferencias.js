@@ -38,54 +38,60 @@ function Transferencias() {
       setShowCodeInput(true);
     };
   
-    const handleConfirmTransfer = (event) => {
-      event.preventDefault();
-  
+    const performTransfer = () => {
+      const date = new Date().toISOString().slice(0, 10);
+      const user = localStorage.getItem("user");
+      const token = JSON.parse(user).Token;
+      const newTransfer = {
+        fromAccount,
+        toAccount,
+        amount,
+        date,
+        token,
+        code
+      };
+    
+      // Perform the transfer
+      fetch("http://localhost:4002/transfer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newTransfer)
+      })
+        .then((response) => {
+          if (response.ok) response.json();
+          else throw new Error(response.statusText);
+    
+        })
+        .then((data) => {
+          setTransfers([...transfers, data]);
+          setBalance(data.balance);
+          setShowSuccessMessage(true);
+          resetForm();
+        })
+        .catch((error) => console.log(error.message));
+    };
+
+    const verifyCode = () => {
       if (code === "") {
         alert("Please enter the code received");
         return;
       }
-  
+    
       // Perform code verification here
-      const codeMatched = true; 
-  
+      const codeMatched = true;
+    
       if (codeMatched) {
-        const date = new Date().toISOString().slice(0, 10);
-        const user = localStorage.getItem("user");
-        const token = JSON.parse(user).Token;
-        const newTransfer = {
-          fromAccount,
-          toAccount,
-          amount,
-          date,
-          token,
-          code
-        };
-        
-        // Perform the transfer
-        fetch("http://localhost:4002/transfer", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(newTransfer)
-        })
-          .then((response) => {
-            if (response.ok) response.json();
-            else throw new Error(response.statusText);
-            
-          })
-          .then((data) => {
-            setTransfers([...transfers, data]);
-            setBalance(data.balance);
-            setShowSuccessMessage(true);
-            resetForm();
-          })
-          .catch((error) => console.log(error.message));
-          //setShowCodeInput(true);
+        performTransfer();
       } else {
         alert("The entered code does not match");
       }
+    };
+
+    const handleConfirmTransfer = (event) => {
+      event.preventDefault();
+      verifyCode();
     };
   
     const resetForm = () => {
@@ -165,7 +171,7 @@ function Transferencias() {
             </button>
           </>
         ) : (
-          <button type="submit" className="transferir">
+          <button type="submit" className="transferir" onClick={performTransfer}>
             <h3>Transfer</h3>
           </button>
         )}
