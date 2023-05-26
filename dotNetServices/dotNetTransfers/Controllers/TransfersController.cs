@@ -26,8 +26,8 @@ namespace Transfers.Controllers
             string token;
             if (request.token == null) return BadRequest("Invalid token");
             else token = request.token;
-            string? guid = VerifyToken(token).Result;
-            if (guid == null)
+            User? user = VerifyToken(token).Result;
+            if (user == null)
             {
                 return BadRequest("Invalid user");
             }
@@ -63,11 +63,6 @@ namespace Transfers.Controllers
             transfers.Add(newTransfer);
             balance -= transferAmount;
 
-            User? user = getUser(guid).Result;
-            if (user == null)
-            {
-                return BadRequest("Invalid user");
-            }
             string? code = null;
             code = SendEmail(request, transferAmount, user.email).Result;
             if (code == null) {
@@ -78,40 +73,24 @@ namespace Transfers.Controllers
             return Ok( new { balance });
         }
 
-        private async Task<string?> VerifyToken(string token)
+        private async Task<User?> VerifyToken(string token)
         {
-            string? userId = null;
 
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
             // Check token
             var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
-            userId = await response.Content.ReadAsStringAsync();
-            TokenResponse? tokenresponse = JsonSerializer.Deserialize<TokenResponse>(userId);
-            if (tokenresponse == null) {
-                return null;
-            } else {
-                if (tokenresponse.IsValid)
-                    {
-                        userId = tokenresponse.userId;
-                    }
-            }
-            return userId;
-        }
-
-        async private Task<User?> getUser(string guid) {
-            var client = new DaprClientBuilder().Build();
-            string? jsonString = await client.GetStateAsync<string>("statestore", guid);
-            if (jsonString == null) return null;
-            User? user = JsonSerializer.Deserialize<User>(jsonString);
+            string response_string = await response.Content.ReadAsStringAsync();
+            User? user = JsonSerializer.Deserialize<User>(response_string);
             return user;
         }
 
-        private async Task<string?> SendEmail(TransferRequest request, decimal transferAmount, string? user_email)
+
+        private async Task<string?> SendEmail(TransferRequest request, decimal transferAmount, string user_email)
         {
             var daprClient = new DaprClientBuilder().Build();
             var metadata = new Dictionary<string, string>
             {
-                ["emailTo"] = "test@subject.com",
+                ["emailTo"] = user_email,
                 ["subject"] = "Test email"
             };
             Random random = new Random();

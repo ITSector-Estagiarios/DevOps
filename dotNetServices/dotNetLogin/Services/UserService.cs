@@ -98,11 +98,19 @@ public class UserService : IUserService
             ClaimsPrincipal principal = handler.ValidateToken(
                 accessToken, validationParameters, out SecurityToken securityToken);
 
-
-            return new ValidationResult { IsValid = true, userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value };
+            var userId = principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+            User? user = getUser(userId).Result;
+            if (user == null) return null;
+            ValidationResult user_details = new ValidationResult{
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                email = user.email
+            };
+            return user_details;
         }
         catch (Exception ex) {
-            return new ValidationResult { IsValid = false, Error = ex.Message };
+            return null;
         }
     }
 
@@ -119,5 +127,13 @@ public class UserService : IUserService
             return false;
         }
 
+    }
+
+    async private Task<User?> getUser(string guid) {
+        var client = new DaprClientBuilder().Build();
+        string? jsonString = await client.GetStateAsync<string>("statestore", guid);
+        if (jsonString == null) return null;
+        User? user = JsonSerializer.Deserialize<User>(jsonString);
+        return user;
     }
 }
