@@ -16,6 +16,7 @@ Para correr MailDev (development smtp)
 
 * docker pull maildev/maildev
 * docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+* Possível alteração dos componentes do DAPR
 
 
 ## Domains e subdomains
