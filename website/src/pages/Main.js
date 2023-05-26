@@ -26,6 +26,9 @@ const Main = () => {
             <li>
               <Link to="/statements">Monthly Statements</Link>
             </li>
+            <li>
+              <Link to="/messaging">Messaging</Link>
+            </li>
           </ul>
         </nav>
         <LogoutButton onLogout={handleLogout} redirectPath="/" />

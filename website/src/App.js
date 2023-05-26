@@ -7,18 +7,9 @@ import ConsultasIBAN from './pages/Consultas/ConsultasIBAN';
 import ConsultasOrdem from './pages/Consultas/ConsultasOrdem';
 import NoPage from './NoPage';
 import Home from './pages/Home/Home';
+import Mensagens from './pages/Mensagens/Mensagens';
 
 function App() {
-  /*const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };*/
-
   return (
     <BrowserRouter>
       <Routes>
@@ -28,6 +19,7 @@ function App() {
           <Route path="transfers" element={<Transferencias />} />
           <Route path="iban" element={<ConsultasIBAN />} />
           <Route path="statements" element={<ConsultasOrdem />} />
+          <Route path="messaging" element={<Mensagens />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
