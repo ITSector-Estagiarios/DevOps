@@ -9,7 +9,6 @@ function Transferencias() {
     const [showCodeInput, setShowCodeInput] = useState(false);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [balance, setBalance] = useState(100000);
-    const [transfers, setTransfers] = useState([]);
   
     const handleTransfer = (event) => {
       event.preventDefault();
@@ -39,16 +38,13 @@ function Transferencias() {
     };
   
     const performTransfer = () => {
-      const date = new Date().toISOString().slice(0, 10);
       const user = localStorage.getItem("user");
       const token = JSON.parse(user).Token;
       const newTransfer = {
+        amount,
         fromAccount,
         toAccount,
-        amount,
-        date,
-        token,
-        code
+        token
       };
     
       // Perform the transfer
@@ -60,38 +56,38 @@ function Transferencias() {
         body: JSON.stringify(newTransfer)
       })
         .then((response) => {
-          if (response.ok) response.json();
+          if (response.ok) setShowCodeInput(true);
           else throw new Error(response.statusText);
     
-        })
-        .then((data) => {
-          setTransfers([...transfers, data]);
-          setBalance(data.balance);
-          setShowSuccessMessage(true);
-          resetForm();
         })
         .catch((error) => console.log(error.message));
     };
 
-    const verifyCode = () => {
-      if (code === "") {
-        alert("Please enter the code received");
-        return;
-      }
-    
-      // Perform code verification here
-      const codeMatched = true;
-    
-      if (codeMatched) {
-        performTransfer();
-      } else {
-        alert("The entered code does not match");
-      }
-    };
 
     const handleConfirmTransfer = (event) => {
       event.preventDefault();
-      verifyCode();
+      const data = { code };
+      fetch("http://localhost:4002/transfer_confirm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+        .then((response) => {
+          if (response.ok) return response.json();
+          else {
+            setShowSuccessMessage(false);
+            throw new Error(response.statusText);
+          }
+        }).then((responsedata) => {
+          const newbalance = responsedata.balance;
+          setBalance(newbalance);
+          setShowSuccessMessage(true);
+          resetForm();
+        }
+
+        ).catch((error) => console.log(error.message));
     };
   
     const resetForm = () => {

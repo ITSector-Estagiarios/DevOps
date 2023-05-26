@@ -14,11 +14,5 @@ public class TransferRequest
     public string? ToAccount { get; set; }
 
     [Required]
-    public string? date { get; set; }
-
-    [Required]
     public string? token { get; set; }
-
-    [Required]
-    public string? code { get; set; }
 }

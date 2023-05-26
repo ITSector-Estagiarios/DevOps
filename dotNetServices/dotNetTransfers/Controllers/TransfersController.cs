@@ -63,12 +63,7 @@ namespace Transfers.Controllers
             if (code == null) {
                 return BadRequest("Error sending an email");
             }
-            
-
             return Ok();
-            /*
-            transfers.Add(newTransfer);
-            balance -= transferAmount;*/
         }
 
         
