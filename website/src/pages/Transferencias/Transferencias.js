@@ -60,7 +60,10 @@ function Transferencias() {
           else throw new Error(response.statusText);
     
         })
-        .catch((error) => console.log(error.message));
+        .catch((error) => {
+          console.log(error.message);
+        });
+       
     };
 
 
@@ -87,7 +90,10 @@ function Transferencias() {
           resetForm();
         }
 
-        ).catch((error) => console.log(error.message));
+        ).catch((error) => {
+          console.log(error.message);
+          alert("Token invalid!");
+        });
     };
   
     const resetForm = () => {
