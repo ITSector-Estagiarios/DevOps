@@ -30,13 +30,11 @@ namespace Transfers.Controllers
             if (user == null)
             {
                 return BadRequest("Invalid user");
-            }
-            
+            }            
             if (request.ToAccount == fromAccount)
             {
                 return BadRequest("You cannot transfer money to the same account.");
             }
-
             if (string.IsNullOrEmpty(request.ToAccount) || string.IsNullOrEmpty(request.Amount))
             {
                 return BadRequest("Please fill in all fields");
@@ -51,27 +49,47 @@ namespace Transfers.Controllers
             {
                 return BadRequest("You don't have enough balance for this transfer");
             }
-
-            var newTransfer = new Transfer
+            int newId = transfers[transfers.Count - 1].id + 1;
+            Transfer newTransfer = new Transfer
             {
+                id = newId, 
                 FromAccount = fromAccount,
                 ToAccount = request.ToAccount,
                 Amount = transferAmount,
                 Date = DateTime.Now,
             };
-
-            transfers.Add(newTransfer);
-            balance -= transferAmount;
-
             string? code = null;
-            code = SendEmail(request, transferAmount, user.email).Result;
+            code = SendEmail(request, transferAmount, user.email, newTransfer).Result;
             if (code == null) {
                 return BadRequest("Error sending an email");
             }
-            else
+            
+
+            return Ok();
+            /*
+            transfers.Add(newTransfer);
+            balance -= transferAmount;*/
+        }
+
+        
+        [HttpPost("transfer_confirm")]
+        public ActionResult transfer_confirm(TransferConfirm request)
+        {
+            string code;
+            if (request.code == null) return BadRequest("Invalid Code");
+            else code = request.code;
+            Transfer? transfer = verifyCode(code).Result;
+            if (transfer == null)
+            {
+                return BadRequest("Invalid transfer");
+            }
+
+            transfers.Add(transfer);
+            balance -= transfer.Amount;
 
             return Ok( new { balance });
         }
+
 
         private async Task<User?> VerifyToken(string token)
         {
@@ -85,7 +103,7 @@ namespace Transfers.Controllers
         }
 
 
-        private async Task<string?> SendEmail(TransferRequest request, decimal transferAmount, string user_email)
+        private async Task<string?> SendEmail(TransferRequest request, decimal transferAmount, string user_email, Transfer transfer)
         {
             var daprClient = new DaprClientBuilder().Build();
             var metadata = new Dictionary<string, string>
@@ -97,12 +115,20 @@ namespace Transfers.Controllers
             string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             string? code = new string(Enumerable.Range(1, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
             var data = "Your code is: " + code;
-
-
+            string jsonString = JsonSerializer.Serialize(transfer);
+            await daprClient.SaveStateAsync("statestore", code, jsonString);
             await daprClient.InvokeBindingAsync("sendemail", "create", data, metadata);
             
             Console.WriteLine("Email sent successfully.");
             return code;
+        }
+
+        private async Task<Transfer?> verifyCode(string code) {
+            var daprClient = new DaprClientBuilder().Build();
+            string? jsonString = await daprClient.GetStateAsync<string>("statestore", code);
+            if (jsonString == null) return null;
+            Transfer? transfer = JsonSerializer.Deserialize<Transfer>(jsonString);
+            return transfer;
         }
     }
 }
