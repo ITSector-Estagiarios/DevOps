@@ -56,7 +56,11 @@ function Transferencias() {
         body: JSON.stringify(newTransfer)
       })
         .then((response) => {
-          if (response.ok) setShowCodeInput(true);
+          if (response.status === 401) {
+            localStorage.removeItem('user');
+            window.location.pathname = '/';
+          }
+          else if (response.ok) setShowCodeInput(true);
           else throw new Error(response.statusText);
     
         })

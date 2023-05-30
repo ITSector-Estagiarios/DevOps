@@ -24,7 +24,7 @@ public class UserDataController : ControllerBase
 
         if (user == null)
         {
-            return NotFound();
+            return StatusCode(401, "Session ended!");
         }
 
         var response = _userdataService.getIban(user.Id);
@@ -39,7 +39,7 @@ public class UserDataController : ControllerBase
 
         if (user == null)
         {
-            return NotFound();
+            return StatusCode(401, "Session ended!");
         }
         var response = _userdataService.getExtracts(user.Id,model);
         publishOperation("Extract Consult");
@@ -51,9 +51,12 @@ public class UserDataController : ControllerBase
         var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
         // Check token
         var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
-        string response_string = await response.Content.ReadAsStringAsync();
-        User? user = JsonSerializer.Deserialize<User>(response_string);
-        return user;
+        if (response.IsSuccessStatusCode) {
+            string response_string = await response.Content.ReadAsStringAsync();
+            User? user = JsonSerializer.Deserialize<User>(response_string);
+            return user;
+        }
+        return null;
     }
 
     private async void publishOperation(string operation) {

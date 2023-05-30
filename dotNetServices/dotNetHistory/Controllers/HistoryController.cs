@@ -26,7 +26,7 @@ public class HistoryController : ControllerBase
         User? user = VerifyToken(token).Result;
         if (user == null)
         {
-            return BadRequest("Invalid user");
+            return StatusCode(401, "Session ended!");
         }
         var response = _historyService.GetUserOperations(user.Id);
         string json = JsonSerializer.Serialize(response);
@@ -48,9 +48,12 @@ public class HistoryController : ControllerBase
         var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
         // Check token
         var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
-        string response_string = await response.Content.ReadAsStringAsync();
-        User? user = JsonSerializer.Deserialize<User>(response_string);
-        return user;
+        if (response.IsSuccessStatusCode) {
+            string response_string = await response.Content.ReadAsStringAsync();
+            User? user = JsonSerializer.Deserialize<User>(response_string);
+            return user;
+        }
+        return null;
     }
 
 }

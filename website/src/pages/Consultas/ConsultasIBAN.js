@@ -18,7 +18,11 @@ function IBAN() {
         },
         body: JSON.stringify(data)
       }).then(response => {
-        if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('user');
+          window.location.pathname = '/';
+        }
+        else if (!response.ok) {
           throw Error("There was an error");  
         }
         return response.json();

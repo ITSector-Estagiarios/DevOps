@@ -29,7 +29,7 @@ namespace Transfers.Controllers
             User? user = VerifyToken(token).Result;
             if (user == null)
             {
-                return BadRequest("Invalid user");
+                return StatusCode(401, "Session ended!");
             }            
             if (request.ToAccount == fromAccount)
             {
@@ -81,7 +81,7 @@ namespace Transfers.Controllers
 
             transfers.Add(transfer);
             balance -= transfer.Amount;
-
+            deleteCode(code);
             publishOperation();
 
             return Ok( new { balance });
@@ -93,16 +93,19 @@ namespace Transfers.Controllers
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
             // Check token
             var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
-            string response_string = await response.Content.ReadAsStringAsync();
-            User? user = JsonSerializer.Deserialize<User>(response_string);
-            return user;
+            if (response.IsSuccessStatusCode) {
+                string response_string = await response.Content.ReadAsStringAsync();
+                User? user = JsonSerializer.Deserialize<User>(response_string);
+                return user;
+            }
+            return null;
         }
 
 
         private async Task<string?> SendEmail(TransferRequest request, decimal transferAmount, string user_email, Transfer transfer)
         {
             var daprClient = new DaprClientBuilder().Build();
-            var metadata = new Dictionary<string, string>
+            var emaildata = new Dictionary<string, string>
             {
                 ["emailTo"] = user_email,
                 ["subject"] = "Test email"
@@ -112,8 +115,12 @@ namespace Transfers.Controllers
             string? code = new string(Enumerable.Range(1, 4).Select(_ => chars[random.Next(chars.Length)]).ToArray());
             var data = "Your code is: " + code;
             string jsonString = JsonSerializer.Serialize(transfer);
-            await daprClient.SaveStateAsync("statestore", code, jsonString);
-            await daprClient.InvokeBindingAsync("sendemail", "create", data, metadata);
+            await daprClient.SaveStateAsync("statestore", code, jsonString,  metadata: new Dictionary<string, string>() { 
+                { 
+                    "metadata.ttlInSeconds", "120" 
+                } 
+            });
+            await daprClient.InvokeBindingAsync("sendemail", "create", data, emaildata);
             
             Console.WriteLine("Email sent successfully.");
             return code;
@@ -125,6 +132,11 @@ namespace Transfers.Controllers
             if (jsonString == null) return null;
             Transfer? transfer = JsonSerializer.Deserialize<Transfer>(jsonString);
             return transfer;
+        }
+
+        private async void deleteCode(string code) {
+            var daprClient = new DaprClientBuilder().Build();
+            await daprClient.DeleteStateAsync("statestore", code);
         }
 
         private async void publishOperation() {

@@ -20,7 +20,11 @@ function Mensagem() {
         },
         body: JSON.stringify({ token })
       }).then(response => {
-        if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('user');
+          window.location.pathname = '/';
+        }
+        else if (!response.ok) {
           throw new Error('There was an error');
         }
         return response.json();
