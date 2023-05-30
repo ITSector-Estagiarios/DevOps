@@ -88,7 +88,6 @@ namespace Transfers.Controllers
 
         private async Task<User?> VerifyToken(string token)
         {
-
             var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
             // Check token
             var response = await daprClient.PostAsJsonAsync("http://loginapi/users/verify", new { Token = token });
