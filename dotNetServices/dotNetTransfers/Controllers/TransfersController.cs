@@ -82,6 +82,8 @@ namespace Transfers.Controllers
             transfers.Add(transfer);
             balance -= transfer.Amount;
 
+            publishOperation();
+
             return Ok( new { balance });
         }
 
@@ -123,6 +125,17 @@ namespace Transfers.Controllers
             if (jsonString == null) return null;
             Transfer? transfer = JsonSerializer.Deserialize<Transfer>(jsonString);
             return transfer;
+        }
+
+        private async void publishOperation() {
+            var daprClient = new DaprClientBuilder().Build();
+            var data = new {
+                type = "Transfer",
+                date = DateTime.Now
+            };
+            //string jsonstring = JsonSerializer.Serialize(data);
+            await daprClient.PublishEventAsync("pubsub","operation", data);
+            Console.WriteLine("Sent Message!");
         }
     }
 }

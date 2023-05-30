@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Mensagens.css';
 
-const App = () => {
+function Mensagem() {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
@@ -55,4 +55,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Mensagem;

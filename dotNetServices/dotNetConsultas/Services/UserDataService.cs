@@ -28,7 +28,8 @@ public class UserDataService : IUserDataService
         new UserExtract { Id = 1, user_Id = 1, month = "January", year = "2022", value = 23 },
         new UserExtract { Id = 2, user_Id = 1, month = "January", year = "2022", value = -4 },
         new UserExtract { Id = 3, user_Id = 1, month = "February", year = "2022", value = 8 },
-        new UserExtract { Id = 4, user_Id = 1, month = "January", year = "2021", value = 5 }
+        new UserExtract { Id = 4, user_Id = 1, month = "January", year = "2021", value = 5 },
+        new UserExtract { Id = 5, user_Id = 1, month = "January", year = "2022", value = 36}
     };
 
 

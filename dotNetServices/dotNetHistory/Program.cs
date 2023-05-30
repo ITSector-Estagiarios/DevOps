@@ -3,9 +3,9 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddDapr();
 
-builder.Services.AddScoped<IHistoryService, HistoryService>();
+builder.Services.AddSingleton<IHistoryService, HistoryService>();
 
 var app = builder.Build();
 
@@ -17,6 +17,8 @@ var app = builder.Build();
         .AllowAnyHeader());
 
     app.MapControllers();
+    app.UseCloudEvents();
+    app.MapSubscribeHandler();
 }
 
 

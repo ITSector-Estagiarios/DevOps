@@ -1,6 +1,7 @@
 ﻿namespace History.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using Dapr;
 using Dapr.Client;
 using History.Models;
 using History.Services;
@@ -32,7 +33,17 @@ public class HistoryController : ControllerBase
         return Ok(json);
     }
 
-    private async Task<User?> VerifyToken(string token)
+    [Topic("pubsub", "operation")]
+    [HttpPost("receive-message")]
+    public IActionResult ReceiveMessage(NewOperation operation)
+    {
+        Console.WriteLine("Received message: " + operation.type);
+        _historyService.addNewOperation(operation);
+        
+        return Ok();
+    }
+
+    private async Task<User?> VerifyToken(String token)
     {
         var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5000");
         // Check token
@@ -41,7 +52,5 @@ public class HistoryController : ControllerBase
         User? user = JsonSerializer.Deserialize<User>(response_string);
         return user;
     }
-
-    
 
 }
