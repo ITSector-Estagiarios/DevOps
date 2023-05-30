@@ -28,6 +28,7 @@ public class UserDataController : ControllerBase
         }
 
         var response = _userdataService.getIban(user.Id);
+        publishOperation("IBAN Consult");
         return Ok(response);
     }
     
@@ -41,6 +42,7 @@ public class UserDataController : ControllerBase
             return NotFound();
         }
         var response = _userdataService.getExtracts(user.Id,model);
+        publishOperation("Extract Consult");
         return Ok(response);
     }
 
@@ -52,6 +54,17 @@ public class UserDataController : ControllerBase
         string response_string = await response.Content.ReadAsStringAsync();
         User? user = JsonSerializer.Deserialize<User>(response_string);
         return user;
+    }
+
+    private async void publishOperation(string operation) {
+        var daprClient = new DaprClientBuilder().Build();
+        var data = new {
+            type = operation,
+            date = DateTime.Now
+        };
+        //string jsonstring = JsonSerializer.Serialize(data);
+        await daprClient.PublishEventAsync("pubsub","operation", data);
+        Console.WriteLine("Sent Message!");
     }
 
     
