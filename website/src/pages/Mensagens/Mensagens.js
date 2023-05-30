@@ -11,6 +11,7 @@ const tabelaDados = [
 const App = () => {
   return (
     <div className="container">
+      <h1 className="title">Messaging - asynchronous exchange of messages</h1>
       <table className="table">
         <thead>
           <tr>
