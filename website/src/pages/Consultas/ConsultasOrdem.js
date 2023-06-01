@@ -4,8 +4,8 @@ import { Component } from 'react';
 
 function MonthlyStatements() {
   // Define estado inicial para o mês e ano selecionado
-  const [month, setMonth] = useState("January");
-  const [year, setYear] = useState("2022");
+  const [month, setMonth] = useState("June");
+  const [year, setYear] = useState("2023");
   const [transactions, setTransactions] = useState([]);
 
 
@@ -86,7 +86,7 @@ function MonthlyStatements() {
               <th>To Account</th>
               <th>Value</th>
               <th>Date</th>
-              <th>Account remaining</th>
+              <th>Current Balance</th>
             </tr>
           </thead>
           <tbody>
