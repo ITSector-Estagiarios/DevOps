@@ -82,6 +82,7 @@ function MonthlyStatements() {
         <table className="transactions-table">
           <thead>
             <tr>
+              <th>User</th>
               <th>From Account</th>
               <th>To Account</th>
               <th>Value</th>
@@ -92,6 +93,7 @@ function MonthlyStatements() {
           <tbody>
             {transactions.map((item) => (
               <tr key={item.id}>
+                <td>{item.user}</td>
                 <td>{item.fromAccount}</td>
                 <td>{item.toAccount}</td>
                 <td>{item.value}</td>
