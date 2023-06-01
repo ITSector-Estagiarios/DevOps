@@ -90,6 +90,9 @@ namespace Transfers.Controllers
             transfers.Add(transfer);
             balance -= transfer.Amount;
             deleteCode(code);
+            if (!recordTransfer(user,transfer).Result) {
+                return BadRequest();
+            }
             publishOperation(user);
 
             return Ok( new { balance });
@@ -145,6 +148,27 @@ namespace Transfers.Controllers
         private async void deleteCode(string code) {
             var daprClient = new DaprClientBuilder().Build();
             await daprClient.DeleteStateAsync("statestore", code);
+        }
+
+        private async Task<bool> recordTransfer(User user, Transfer transfer)
+        {
+            var daprClient = DaprClient.CreateInvokeHttpClient("localhost:5001");
+            // Check token
+            var response = await daprClient.PostAsJsonAsync("http://consultasapi/new_extract", new {
+                user = user,
+                month = convertMonth(transfer.Date.Month),
+                year = transfer.Date.Year.ToString(),
+                value = transfer.Amount,
+                newBalance = balance,
+                fromAccount = transfer.FromAccount,
+                toAccount = transfer.ToAccount
+            });
+            return response.IsSuccessStatusCode;
+        }
+
+        private string convertMonth(int month) {
+            List<string> months = new List<string> {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+            return months[month-1];
         }
 
         private async void publishOperation(User user) {

@@ -32,7 +32,7 @@ public class UserDataController : ControllerBase
         return Ok(response);
     }
     
-   [HttpPost("extract")]
+    [HttpPost("extract")]
     public IActionResult GetExtracts(AuthenticateExtractRequest model)
     {
         User? user = verifyToken(model.token).Result;
@@ -44,6 +44,12 @@ public class UserDataController : ControllerBase
         var response = _userdataService.getExtracts(user.Id,model);
         publishOperation("Extract Consult", user);
         return Ok(response);
+    }
+    [HttpPost("new_extract")]
+    public IActionResult AddExtract(AuthenticateNewExtract model)
+    {
+        _userdataService.addExtract(model);
+        return Ok();
     }
 
     private async Task<User?> verifyToken(string token){

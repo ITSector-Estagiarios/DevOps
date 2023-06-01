@@ -1,20 +1,22 @@
-
-
 namespace Consultas.Models;
 
-public class UserExtract
+using System.ComponentModel.DataAnnotations;
+
+public class AuthenticateNewExtract
 {
-    public long Id { get; set; }
-    public long user_Id { get; set; }
-
+    [Required]
+    public User user { get; set; }
+    [Required]
     public string month { get; set; }
-
+    [Required]
     public string year { get; set; }
-
+    [Required]
     public long value { get; set; }
+    [Required]
     public long newBalance { get; set; }
+    [Required]
     public string fromAccount { get; set; }
+    [Required]
     public string toAccount { get; set; }
-    public string firstName { get; set; }
-    public string lastName { get; set; }
+
 }

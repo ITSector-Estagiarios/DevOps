@@ -31,6 +31,7 @@ function MonthlyStatements() {
       return response.json()
     }).then(responsedata => {
       var extracts = responsedata.extracts;
+      console.log(extracts)
       setTransactions(extracts);
     }).catch(error => {
       console.log(error.message)
@@ -93,12 +94,12 @@ function MonthlyStatements() {
           <tbody>
             {transactions.map((item) => (
               <tr key={item.id}>
-                <td>{item.user}</td>
+                <td>{item.firstName + " " + item.lastName}</td>
                 <td>{item.fromAccount}</td>
                 <td>{item.toAccount}</td>
                 <td>{item.value}</td>
-                <td>{item.date}</td>
-                <td>{item.accountRemaining}</td>
+                <td>{item.month + "/" + item.year}</td>
+                <td>{item.newBalance}</td>
               </tr>
             ))}
           </tbody>
