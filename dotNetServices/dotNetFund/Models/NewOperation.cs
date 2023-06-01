@@ -1,4 +1,4 @@
-namespace History.Models;
+namespace Fund.Models;
 
 using System.Text.Json.Serialization;
 

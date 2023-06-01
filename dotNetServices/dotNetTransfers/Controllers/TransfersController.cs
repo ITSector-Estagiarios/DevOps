@@ -93,7 +93,7 @@ namespace Transfers.Controllers
             if (!recordTransfer(user,transfer).Result) {
                 return BadRequest();
             }
-            publishOperation(user);
+            publishOperation(user,transfer);
 
             return Ok( new { balance });
         }
@@ -171,14 +171,19 @@ namespace Transfers.Controllers
             return months[month-1];
         }
 
-        private async void publishOperation(User user) {
+        private async void publishOperation(User user, Transfer transfer) {
             var daprClient = new DaprClientBuilder().Build();
+            string jsonString = JsonSerializer.Serialize( new {
+                amount = transfer.Amount,
+                user_id = user.Id,
+                email = user.email,
+                firstName = user.FirstName,
+                lastName = user.LastName
+            });
             var data = new {
                 type = "Transfer",
                 date = DateTime.Now,
-                user_id = user.Id,
-                firstName = user.FirstName,
-                lastName = user.LastName
+                message_data = jsonString
             };
             //string jsonstring = JsonSerializer.Serialize(data);
             await daprClient.PublishEventAsync("pubsub","operation", data);

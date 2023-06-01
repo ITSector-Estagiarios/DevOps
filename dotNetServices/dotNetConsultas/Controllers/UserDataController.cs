@@ -67,12 +67,16 @@ public class UserDataController : ControllerBase
 
     private async void publishOperation(string operation, User user) {
         var daprClient = new DaprClientBuilder().Build();
+        string jsonString = JsonSerializer.Serialize(new {
+            user_id = user.Id,
+            email = user.email,
+            firstName = user.FirstName,
+            lastName = user.LastName
+        });
         var data = new {
             type = operation,
             date = DateTime.Now,
-            user_id = user.Id,
-            firstName = user.FirstName,
-            lastName = user.LastName
+            message_data = jsonString
         };
         //string jsonstring = JsonSerializer.Serialize(data);
         await daprClient.PublishEventAsync("pubsub","operation", data);

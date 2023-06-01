@@ -34,16 +34,32 @@ public class HistoryService : IHistoryService
         } else {
             newId = _operations[_operations.Count - 1].id + 1;
         }
+        if (operation.type == "Transfer") {
+            TrasnferOperation transfer = JsonSerializer.Deserialize<TrasnferOperation>(operation.message_data);
+            Operation newOperation = new Operation{
+                id = newId,
+                user_id = transfer.user_id,
+                type = operation.type,
+                date = operation.date,
+                firstName = transfer.firstName,
+                lastName = transfer.lastName
+            };
+            _operations.Add(newOperation);
+        }
+        if (operation.type.Contains("Consult")) {
+            ConsultOperation consult = JsonSerializer.Deserialize<ConsultOperation>(operation.message_data);
+            Operation newOperation = new Operation{
+                id = newId,
+                user_id = consult.user_id,
+                type = operation.type,
+                date = operation.date,
+                firstName = consult.firstName,
+                lastName = consult.lastName
+            };
+            _operations.Add(newOperation);
+        }
         
-        Operation newOperation = new Operation{
-            id = newId,
-            user_id = operation.user_id,
-            type = operation.type,
-            date = operation.date,
-            firstName = operation.firstName,
-            lastName = operation.lastName
-        };
-        _operations.Add(newOperation);
+
     }
 
 }
