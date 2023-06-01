@@ -101,12 +101,17 @@ p {
   margin-top: 40px;
 }
 
-.transactions-table th,
-.transactions-table td {
+.transactions-table th{
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #000000;
   color: white;
+}
+
+.transactions-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #000000;
 }
 
 .transactions-table th {
