@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Mensagens.css';
 
 function Mensagem() {
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState(null);
 
   useEffect(() => {
     fetchHistory();
@@ -29,21 +29,27 @@ function Mensagem() {
         }
         return response.json();
       }).then(responsedata => {
-        setHistory(responsedata);
+        if (responsedata.length > 0) setHistory(responsedata);
       })
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  return (
+  if (history == null) return (
     <div className="container">
-      <h1 className="title">Messaging - asynchronous exchange of messages</h1>
+    <h1 className="title">History of user operations</h1>
+    <h3>No activity found!</h3>
+  </div>
+  );
+  else return (
+    <div className="container">
+      <h1 className="title">History of user operations</h1>
       <table className="table">
         <thead>
           <tr>
             <th>Type</th>
             <th>Date</th>
+            <th>User</th>
           </tr>
         </thead>
         <tbody>
@@ -51,6 +57,7 @@ function Mensagem() {
             <tr key={index}>
               <td>{item.type}</td>
               <td>{item.date}</td>
+              <td>{item.firstName + " " + item.lastName}</td>
             </tr>
           ))}
         </tbody>

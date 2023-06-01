@@ -73,7 +73,9 @@ function Transferencias() {
 
     const handleConfirmTransfer = (event) => {
       event.preventDefault();
-      const data = { code };
+      const user = localStorage.getItem("user");
+      const token = JSON.parse(user).Token;
+      const data = { code , token };
       fetch("http://localhost:4002/transfer_confirm", {
         method: "POST",
         headers: {

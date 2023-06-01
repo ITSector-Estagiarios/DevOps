@@ -12,4 +12,6 @@ public class Operation
     public string type { get; set; }
 
     public DateTime date { get; set; }
+    public string firstName { get; set; }
+    public string lastName { get; set; }
 }

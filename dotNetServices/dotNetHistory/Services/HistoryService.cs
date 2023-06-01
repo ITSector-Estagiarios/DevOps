@@ -17,17 +17,7 @@ public interface IHistoryService
 
 public class HistoryService : IHistoryService
 {
-    // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-    private List<Operation> _operations = new List<Operation>
-    {
-        new Operation { id = 1, user_id = 1, type = "Consult", date = new DateTime(2023, 03, 02) },
-        new Operation { id = 2, user_id = 1, type = "Consult", date = new DateTime(2023, 03, 06) },
-        new Operation { id = 3, user_id = 1, type = "Consult", date = new DateTime(2023, 05, 19) },
-        new Operation { id = 4, user_id = 2, type = "Consult", date = new DateTime(2023, 02, 16) },
-        new Operation { id = 5, user_id = 2, type = "Consult", date = new DateTime(2023, 04, 20) },
-        new Operation { id = 6, user_id = 2, type = "Transfer", date = new DateTime(2023, 05, 12) },
-        
-    };
+    private List<Operation> _operations = new List<Operation>{};
 
 
     public IEnumerable<Operation> GetUserOperations(int id)
@@ -38,12 +28,20 @@ public class HistoryService : IHistoryService
 
     public void addNewOperation(NewOperation operation) 
     {
-        int newId = _operations[_operations.Count - 1].id + 1;
+        int newId;
+        if (_operations.Count == 0) {
+            newId = 1;
+        } else {
+            newId = _operations[_operations.Count - 1].id + 1;
+        }
+        
         Operation newOperation = new Operation{
             id = newId,
-            user_id = 1,
+            user_id = operation.user_id,
             type = operation.type,
-            date = operation.date
+            date = operation.date,
+            firstName = operation.firstName,
+            lastName = operation.lastName
         };
         _operations.Add(newOperation);
     }

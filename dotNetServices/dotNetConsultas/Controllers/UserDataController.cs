@@ -28,7 +28,7 @@ public class UserDataController : ControllerBase
         }
 
         var response = _userdataService.getIban(user.Id);
-        publishOperation("IBAN Consult");
+        publishOperation("IBAN Consult", user);
         return Ok(response);
     }
     
@@ -42,7 +42,7 @@ public class UserDataController : ControllerBase
             return StatusCode(401, "Session ended!");
         }
         var response = _userdataService.getExtracts(user.Id,model);
-        publishOperation("Extract Consult");
+        publishOperation("Extract Consult", user);
         return Ok(response);
     }
 
@@ -59,11 +59,14 @@ public class UserDataController : ControllerBase
         return null;
     }
 
-    private async void publishOperation(string operation) {
+    private async void publishOperation(string operation, User user) {
         var daprClient = new DaprClientBuilder().Build();
         var data = new {
             type = operation,
-            date = DateTime.Now
+            date = DateTime.Now,
+            user_id = user.Id,
+            firstName = user.FirstName,
+            lastName = user.LastName
         };
         //string jsonstring = JsonSerializer.Serialize(data);
         await daprClient.PublishEventAsync("pubsub","operation", data);

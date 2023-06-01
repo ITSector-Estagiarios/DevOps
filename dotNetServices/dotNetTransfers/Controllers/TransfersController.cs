@@ -70,6 +70,14 @@ namespace Transfers.Controllers
         [HttpPost("transfer_confirm")]
         public ActionResult transfer_confirm(TransferConfirm request)
         {
+            string token;
+            if (request.token == null) return BadRequest("Invalid token");
+            else token = request.token;
+            User? user = VerifyToken(token).Result;
+            if (user == null)
+            {
+                return StatusCode(401, "Session ended!");
+            } 
             string code;
             if (request.code == null) return BadRequest("Invalid Code");
             else code = request.code;
@@ -82,7 +90,7 @@ namespace Transfers.Controllers
             transfers.Add(transfer);
             balance -= transfer.Amount;
             deleteCode(code);
-            publishOperation();
+            publishOperation(user);
 
             return Ok( new { balance });
         }
@@ -139,11 +147,14 @@ namespace Transfers.Controllers
             await daprClient.DeleteStateAsync("statestore", code);
         }
 
-        private async void publishOperation() {
+        private async void publishOperation(User user) {
             var daprClient = new DaprClientBuilder().Build();
             var data = new {
                 type = "Transfer",
-                date = DateTime.Now
+                date = DateTime.Now,
+                user_id = user.Id,
+                firstName = user.FirstName,
+                lastName = user.LastName
             };
             //string jsonstring = JsonSerializer.Serialize(data);
             await daprClient.PublishEventAsync("pubsub","operation", data);
