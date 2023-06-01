@@ -27,7 +27,7 @@ const Main = () => {
               <Link to="/statements">Monthly Statements</Link>
             </li>
             <li>
-              <Link to="/messaging">Messaging</Link>
+              <Link to="/accountActivity">Messaging</Link>
             </li>
           </ul>
         </nav>

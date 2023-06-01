@@ -19,7 +19,7 @@ function App() {
           <Route path="transfers" element={<Transferencias />} />
           <Route path="iban" element={<ConsultasIBAN />} />
           <Route path="statements" element={<ConsultasOrdem />} />
-          <Route path="messaging" element={<Mensagens />} />
+          <Route path="accountActivity" element={<Mensagens />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

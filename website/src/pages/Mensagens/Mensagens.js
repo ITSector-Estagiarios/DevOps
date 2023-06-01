@@ -38,7 +38,7 @@ function Mensagem() {
 
   return (
     <div className="container">
-      <h1 className="title">Messaging - asynchronous exchange of messages</h1>
+      <h1 className="title">Account Activity</h1>
       <table className="table">
         <thead>
           <tr>
