@@ -71,6 +71,7 @@ function MonthlyStatements() {
       <div className="form-group">
         <label htmlFor="year" className="select-label">Year:</label>
         <select className="select-group" id="year" value={year} onChange={handleYearChange}>
+          <option value="2023">2023</option>
           <option value="2022">2022</option>
           <option value="2021">2021</option>
           <option value="2020">2020</option>
@@ -78,14 +79,28 @@ function MonthlyStatements() {
       </div>
       <button className="btn btn-primary" onClick={fetchTransactions}>View Statement</button>
       {transactions.length > 0 && (
-        <ul className='transactions-list'>
-          {transactions.map((item) => (
-          <li key={item.id}>
-            <p> Transaction nº: {item.id}</p>
-            <p> Value:  {item.value} </p>
-          </li>
-        ))}
-        </ul>
+        <table className="transactions-table">
+          <thead>
+            <tr>
+              <th>From Account</th>
+              <th>To Account</th>
+              <th>Value</th>
+              <th>Date</th>
+              <th>Account remaining</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((item) => (
+              <tr key={item.id}>
+                <td>{item.fromAccount}</td>
+                <td>{item.toAccount}</td>
+                <td>{item.value}</td>
+                <td>{item.date}</td>
+                <td>{item.accountRemaining}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
