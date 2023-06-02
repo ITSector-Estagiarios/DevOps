@@ -1,12 +1,7 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - main
 
-parameters:
+parameters: # Determines if heavier QA tests will be executed
   - name: runQATests
     default: false
     values:
@@ -26,19 +21,16 @@ stages:
   jobs:
   - job: Development
     steps:
-    - script: echo Hi > helloworld.txt
-      displayName: 'BS'
     - script: cd $(projectFolder) && npm install
       displayName: 'Install dependencies'
     - script: cd $(projectFolder) && npm run build
       displayName: 'Build'
-    #- script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
-    #  displayName: 'Partial Test Suite' 
+    - script: cd $(projectFolder) && npm run test -- --onlyChanged --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+      displayName: 'Partial Test Suite' 
     - script: cd dotNetServices && for d in */; do (cd "$d" && dotnet publish -r win-x64 --output OutputExe --self-contained -c Release /p:PublishSingleFile=true /p:AssemblyName="mydotnet_${d%/}" && pwd); done
       displayName: 'dotNet Publish'
     - script: cd dotNetServices && mkdir -p ../save && for d in */OutputExe/; do (mkdir -p ../save/$d && cd "$d" && cp -r * ../../../save/$d ); done  
-      displayName: Gathering Published Executables
-    
+      displayName: Gathering Executables
     - task: CopyFiles@2
       inputs:
         Contents: |
@@ -46,7 +38,6 @@ stages:
           save/**
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
       displayName: Select Release Files
-
     - task: ArchiveFiles@2
       inputs:
         rootFolderOrFile: $(Build.ArtifactStagingDirectory)
@@ -59,64 +50,29 @@ stages:
         pathtoPublish: '$(Build.ArtifactStagingDirectory)/release.zip'
         targetPath: '$(System.DefaultWorkingDirectory)/publish'
       displayName: Artifact Release
-    
-    - task: ArchiveFiles@2
-      inputs:
-        rootFolderOrFile: save/dotNetConsultas
-        archiveType: 'zip'
-        archiveFile: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
-        includeRootFolder: true
-      displayName: Zip Release Files
-    
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)/releaseConsultas.zip'
-        targetPath: '$(System.DefaultWorkingDirectory)/publish'
-        ArtifactName: 'dropConsultas'
-      displayName: Artifact Release
-    
-    
-#- stage: Deployment
-#  pool:
-#      vmImage: windows-latest
-#  jobs:
-#  - job: Deployment
-#    steps:
-#    - task: AzureFileCopy@5
-#      inputs:
-#        SourcePath: '$(System.DefaultWorkingDirectory)/publish'
-#        azureSubscription: 'connection'
-#        Destination: 'AzureVMs'
-#        storage: 'itsectorfeupexample'
-#        resourceGroup: 'EXAMPLE-RESOURCES'
-#        vmsAdminUserName: 'adminuser'
-#        vmsAdminPassword: 'P@$$w0rd1234!'
-#        TargetPath: '/'
-#    
-#
-#- stage: QA
-#  dependsOn: Development
-#  condition: succeeded('Development')
-#  jobs:
-#  - job: QATesting
-#    steps:
-#    - script: cd $(projectFolder) && npm install
-#      displayName: 'Install dependencies'
-#    - script: cd $(projectFolder) && npm run build
-#      displayName: 'Build'
-#    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
-#      displayName: 'Full Test Suite'
-#    - script: cd $(projectFolder) && npm run mutation
-#      displayName: Mutation Testing
-#    condition: ${{parameters.runQATests}}
-#  - job: Approval
-#    displayName: "Manual Approval"
-#    pool: server
-#    steps:
-#      - task: ManualValidation@0
-#        timeoutInMinutes: 60
-#        inputs:
-#          notifyUsers: 'E6022@itsector.pt'
-#          instructions: 'Release'
-#          onTimeout: reject
-#
+
+- stage: QA
+  dependsOn: Development
+  condition: succeeded('Development')
+  jobs:
+  - job: QATesting
+    steps:
+    - script: cd $(projectFolder) && npm install
+      displayName: 'Install dependencies'
+    - script: cd $(projectFolder) && npm run build
+      displayName: 'Build'
+    - script: cd $(projectFolder) && npm run test -- --coverage --coverageThreshold='{"global":{"branches":"$(qualityGateThreshold)","functions":"$(qualityGateThreshold)","lines":"$(qualityGateThreshold)","statements":"$(qualityGateThreshold)"}}'
+      displayName: 'Full Test Suite'
+    - script: cd $(projectFolder) && npm run mutation
+      displayName: Mutation Testing
+    condition: ${{parameters.runQATests}}
+  - job: Approval
+    displayName: "Manual Approval"
+    pool: server
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 60
+        inputs:
+          notifyUsers: 'E6022@itsector.pt'
+          instructions: 'Release'
+          onTimeout: reject
